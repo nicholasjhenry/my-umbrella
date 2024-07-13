@@ -8,10 +8,11 @@ defmodule MyUmbrella.WeatherApi.Response do
   alias MyUmbrella.Weather
 
   @spec to_weather(t()) :: {:ok, list(Weather.t())}
-  def to_weather(%{"hourly" => hourly}) do
-    weather_data = Enum.map(hourly, &parse_forecast/1)
+  def to_weather(%{"current" => current, "hourly" => hourly}) do
+    current_data = parse_forecast(current)
+    forecast_data = Enum.map(hourly, &parse_forecast/1)
 
-    {:ok, weather_data}
+    {:ok, [current_data | forecast_data]}
   end
 
   def to_weather(_response) do
