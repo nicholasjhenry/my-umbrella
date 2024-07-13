@@ -13,7 +13,7 @@ _Nullables_ from the pattern language _Testing Without Mocks_.
 ## Example
 
 ```elixir
-orlando = {28.5383, -81.3792}
+orlando = MyUmbrella.Coordinates.new(28.5383, -81.3792)
 MyUmbrella.for_today(orlando)
 #=> {:ok, "Thunderstorms! Take two umbrellas!"}
 ```

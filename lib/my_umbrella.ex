@@ -3,6 +3,7 @@ defmodule MyUmbrella do
   A context module.
   """
 
+  alias MyUmbrella.Coordinates
   alias MyUmbrella.WeatherApi
 
   defmodule Announcement do
@@ -13,11 +14,9 @@ defmodule MyUmbrella do
     @type t :: String.t()
   end
 
-  @type location :: {float(), float()}
-
-  @spec for_today(location, module()) :: {:ok, Announcement.t()} | {:error, term}
-  def for_today(location, weather_api) do
-    with {:ok, response} <- weather_api.get_forecast(location, :today),
+  @spec for_today(Coordinates.t(), module()) :: {:ok, Announcement.t()} | {:error, term}
+  def for_today(coordinates, weather_api) do
+    with {:ok, response} <- weather_api.get_forecast(coordinates, :today),
          {:ok, _weather} <- WeatherApi.Response.to_weather(response) do
       {:ok, "Nah, all good"}
     end

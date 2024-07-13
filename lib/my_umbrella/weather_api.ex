@@ -8,11 +8,11 @@ defmodule MyUmbrella.WeatherApi do
 
   alias MyUmbrella.WeatherApi.Response
 
-  @type location :: {float(), float()}
+  @type coordinates :: {float(), float()}
 
   @orlando {28.5383, -81.3792}
 
-  @spec get_forecast(location, duration :: :today) :: {:ok, Response.t()}
+  @spec get_forecast(coordinates, duration :: :today) :: {:ok, Response.t()}
   def get_forecast(@orlando, :today) do
     {:ok, %{}}
   end
