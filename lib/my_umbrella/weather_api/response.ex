@@ -5,12 +5,13 @@ defmodule MyUmbrella.WeatherApi.Response do
 
   @type t :: map()
 
+  alias MyUmbrella.Coordinates
   alias MyUmbrella.Weather
 
   @spec to_weather(t()) :: {:ok, list(Weather.t())}
-  def to_weather(%{"current" => current, "hourly" => hourly}) do
-    current_data = parse_forecast(current)
-    forecast_data = Enum.map(hourly, &parse_forecast/1)
+  def to_weather(%{"current" => current, "hourly" => hourly} = response) do
+    current_data = parse_forecast(response, current)
+    forecast_data = Enum.map(hourly, &parse_forecast(response, &1))
 
     {:ok, [current_data | forecast_data]}
   end
@@ -22,10 +23,12 @@ defmodule MyUmbrella.WeatherApi.Response do
     {:ok, weather_data}
   end
 
-  defp parse_forecast(forecast) do
+  defp parse_forecast(response, forecast) do
+    %{"lat" => lat, "lon" => lon} = response
+    coordinates = Coordinates.new(lat, lon)
     weather_datetime = forecast |> Map.fetch!("dt") |> DateTime.from_unix!()
     weather_code = forecast |> Map.fetch!("weather") |> List.first() |> Map.fetch!("id")
 
-    %Weather{datetime: weather_datetime, code: weather_code}
+    %Weather{coordinates: coordinates, datetime: weather_datetime, code: weather_code}
   end
 end
