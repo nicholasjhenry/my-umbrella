@@ -3,6 +3,8 @@ defmodule MyUmbrella do
   A context module.
   """
 
+  alias MyUmbrella.WeatherApi
+
   defmodule Announcement do
     @moduledoc """
     A type for the announcement in regards to the weather conditions.
@@ -15,7 +17,9 @@ defmodule MyUmbrella do
 
   @spec for_today(location, module()) :: {:ok, Announcement.t()} | {:error, term}
   def for_today(location, weather_api) do
-    {:ok, _weather} = weather_api.get_forecast(location, :today)
-    {:ok, "Nah, all good"}
+    with {:ok, response} <- weather_api.get_forecast(location, :today),
+         {:ok, _weather} <- WeatherApi.Response.to_weather(response) do
+      {:ok, "Nah, all good"}
+    end
   end
 end

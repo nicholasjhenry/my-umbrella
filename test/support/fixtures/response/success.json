@@ -1,0 +1,95 @@
+{
+  "lat": 28.5383,
+  "lon": -81.3792,
+  "timezone": "America/New_York",
+  "timezone_offset": -14400,
+  "current": {
+    "dt": 946771200,
+    "sunrise": 1720867012,
+    "sunset": 1720916722,
+    "temp": 305.36,
+    "feels_like": 311.36,
+    "pressure": 1022,
+    "humidity": 62,
+    "dew_point": 297.15,
+    "uvi": 9.55,
+    "clouds": 0,
+    "visibility": 10000,
+    "wind_speed": 2.06,
+    "wind_deg": 140,
+    "weather": [
+      { "id": 800, "main": "Clear", "description": "clear sky", "icon": "01d" }
+    ]
+  },
+  "hourly": [
+    {
+      "dt": 946774800,
+      "temp": 300.11,
+      "feels_like": 302.8,
+      "pressure": 1018,
+      "humidity": 80,
+      "dew_point": 296.36,
+      "uvi": 0.69,
+      "clouds": 96,
+      "visibility": 10000,
+      "wind_speed": 2.39,
+      "wind_deg": 174,
+      "wind_gust": 3.77,
+      "weather": [
+        {
+          "id": 804,
+          "main": "Clouds",
+          "description": "overcast clouds",
+          "icon": "04d"
+        }
+      ],
+      "pop": 0
+    },
+    {
+      "dt": 946778400,
+      "temp": 301.87,
+      "feels_like": 305.28,
+      "pressure": 1019,
+      "humidity": 70,
+      "dew_point": 295.9,
+      "uvi": 2.18,
+      "clouds": 88,
+      "visibility": 10000,
+      "wind_speed": 2.52,
+      "wind_deg": 178,
+      "wind_gust": 3.23,
+      "weather": [
+        {
+          "id": 804,
+          "main": "Clouds",
+          "description": "overcast clouds",
+          "icon": "04d"
+        }
+      ],
+      "pop": 0
+    },
+    {
+      "dt": 946782000,
+      "temp": 303.53,
+      "feels_like": 306.94,
+      "pressure": 1019,
+      "humidity": 61,
+      "dew_point": 295.28,
+      "uvi": 4.66,
+      "clouds": 95,
+      "visibility": 10000,
+      "wind_speed": 2.2,
+      "wind_deg": 186,
+      "wind_gust": 2.03,
+      "weather": [
+        {
+          "id": 804,
+          "main": "Clouds",
+          "description": "overcast clouds",
+          "icon": "04d"
+        }
+      ],
+      "pop": 0
+    }
+  ]
+}

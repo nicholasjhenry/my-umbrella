@@ -1,18 +1,19 @@
 defmodule MyUmbrella.WeatherApi do
   @moduledoc """
   An external dependency to get weather forecasts.
+
+  - Current and forecasts weather data: https://openweathermap.org/api/one-call-3#current
+  - Weather Conditions: https://openweathermap.org/weather-conditions
   """
 
-  alias MyUmbrella.Weather
+  alias MyUmbrella.WeatherApi.Response
 
   @type location :: {float(), float()}
 
   @orlando {28.5383, -81.3792}
 
-  @spec get_forecast(location, duration :: :today) :: list(Weather.t())
+  @spec get_forecast(location, duration :: :today) :: {:ok, Response.t()}
   def get_forecast(@orlando, :today) do
-    clear = 800
-    weather_data = [%Weather{datetime: ~U[1970-01-01 00:00:00Z], code: clear}]
-    {:ok, weather_data}
+    {:ok, %{}}
   end
 end
