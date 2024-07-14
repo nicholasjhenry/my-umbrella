@@ -1,6 +1,7 @@
-defmodule MyUmbrella.Weather do
+defmodule MyUmbrella.WeatherReport do
   @moduledoc """
-  A type representing the weather reported or forecasted.
+  A form of communication for forecasting atmospheric conditions, precipitation, and
+  wind patterns, for a specific location and time.
   """
   alias MyUmbrella.Coordinates
 

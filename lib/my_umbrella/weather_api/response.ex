@@ -18,9 +18,9 @@ defmodule MyUmbrella.WeatherApi.Response do
   ]
 
   alias MyUmbrella.Coordinates
-  alias MyUmbrella.Weather
+  alias MyUmbrella.WeatherReport
 
-  @spec to_weather(t()) :: {:ok, list(Weather.t())}
+  @spec to_weather(t()) :: {:ok, list(WeatherReport.t())}
   def to_weather(%{"current" => current, "hourly" => hourly} = response) do
     current_data = parse_forecast(response, current)
     forecast_data = Enum.map(hourly, &parse_forecast(response, &1))
@@ -31,7 +31,7 @@ defmodule MyUmbrella.WeatherApi.Response do
   def to_weather(_response) do
     london = Coordinates.new(51.5098, -0.118)
 
-    weather = %Weather{
+    weather = %WeatherReport{
       coordinates: london,
       datetime: ~U[1970-01-01 00:00:00Z],
       condition: :clear,
@@ -50,7 +50,7 @@ defmodule MyUmbrella.WeatherApi.Response do
     {weather_condition, _codes} =
       Enum.find(@conditions, fn {_condition, codes} -> weather_code in codes end)
 
-    %Weather{
+    %WeatherReport{
       coordinates: coordinates,
       datetime: weather_datetime,
       condition: weather_condition,
