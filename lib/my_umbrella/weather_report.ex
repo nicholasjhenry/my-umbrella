@@ -25,6 +25,24 @@ defmodule MyUmbrella.WeatherReport do
     drizzle: 300..321
   ]
 
+  @spec compare(t, t) :: :eq | :gt | :lt
+  def compare(lhs, rhs) do
+    weighted_condition =
+      @precipitation_conditions
+      |> Enum.reverse()
+      |> Enum.with_index(fn {key, _value}, index -> {key, index} end)
+      |> Map.new()
+
+    lhs_weight = Map.fetch!(weighted_condition, lhs.condition)
+    rhs_weight = Map.fetch!(weighted_condition, rhs.condition)
+
+    cond do
+      lhs_weight == rhs_weight -> :eq
+      lhs_weight > rhs_weight -> :gt
+      lhs_weight < rhs_weight -> :lt
+    end
+  end
+
   @spec eq?(t(), t()) :: boolean()
   def eq?(lhs, rhs) do
     lhs.coordinates == rhs.coordinates &&
@@ -32,9 +50,11 @@ defmodule MyUmbrella.WeatherReport do
       lhs.code == rhs.code
   end
 
-  def determine_most_intense_precipitation_condition(weather_data) do
-    weather_data
+  @spec determine_most_intense_precipitation_condition(list(t())) :: t() | nil
+  def determine_most_intense_precipitation_condition(weather_reports) do
+    weather_reports
     |> Enum.filter(&perciptation?/1)
+    |> Enum.sort_by(& &1, {:desc, __MODULE__})
     |> List.first()
   end
 
