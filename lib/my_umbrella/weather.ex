@@ -4,11 +4,16 @@ defmodule MyUmbrella.Weather do
   """
   alias MyUmbrella.Coordinates
 
-  defstruct [:coordinates, :datetime, :code]
+  @enforce_keys [:coordinates, :datetime, :condition, :code]
+
+  defstruct [:coordinates, :datetime, :condition, :code]
+
+  @type condition :: :atmosphere | :clear | :clouds | :drizzle | :rain | :snow | :thunderstorm
 
   @type t :: %__MODULE__{
           coordinates: Coordinates.t(),
           datetime: DateTime.t(),
+          condition: condition(),
           code: integer()
         }
 

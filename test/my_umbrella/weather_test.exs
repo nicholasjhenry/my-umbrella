@@ -14,12 +14,12 @@ defmodule MyUmbrella.WeatherApi.WeatherTest do
     test "given a single weather report with precipitation; then returns that weather report" do
       london = Coordinates.new(51.5098, -0.118)
       utc_2130 = ~U[2000-01-01 21:30:00Z]
-      rain = 500
 
       single_weather = %Weather{
         coordinates: london,
         datetime: utc_2130,
-        code: rain
+        code: 500,
+        condition: :rain
       }
 
       weather_data = [single_weather]
@@ -30,12 +30,12 @@ defmodule MyUmbrella.WeatherApi.WeatherTest do
     test "given a single weather report with no precipitation; then returns nothing" do
       london = Coordinates.new(51.5098, -0.118)
       utc_2130 = ~U[2000-01-01 21:30:00Z]
-      clear_sky = 800
 
       single_weather = %Weather{
         coordinates: london,
         datetime: utc_2130,
-        code: clear_sky
+        condition: :clear,
+        code: 800
       }
 
       weather_data = [single_weather]

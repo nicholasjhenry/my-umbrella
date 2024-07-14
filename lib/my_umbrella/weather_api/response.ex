@@ -5,6 +5,18 @@ defmodule MyUmbrella.WeatherApi.Response do
 
   @type t :: map()
 
+  # https://openweathermap.org/weather-conditions
+  #
+  @conditions [
+    thunderstorm: 200..232,
+    drizzle: 300..321,
+    rain: 500..531,
+    snow: 600..622,
+    atmosphere: 701..781,
+    clear: 800..800,
+    clouds: 801..804
+  ]
+
   alias MyUmbrella.Coordinates
   alias MyUmbrella.Weather
 
@@ -17,10 +29,16 @@ defmodule MyUmbrella.WeatherApi.Response do
   end
 
   def to_weather(_response) do
-    clear = 800
-    weather_data = [%Weather{datetime: ~U[1970-01-01 00:00:00Z], code: clear}]
+    london = Coordinates.new(51.5098, -0.118)
 
-    {:ok, weather_data}
+    weather = %Weather{
+      coordinates: london,
+      datetime: ~U[1970-01-01 00:00:00Z],
+      condition: :clear,
+      code: 800
+    }
+
+    {:ok, [weather]}
   end
 
   defp parse_forecast(response, forecast) do
@@ -29,6 +47,14 @@ defmodule MyUmbrella.WeatherApi.Response do
     weather_datetime = forecast |> Map.fetch!("dt") |> DateTime.from_unix!()
     weather_code = forecast |> Map.fetch!("weather") |> List.first() |> Map.fetch!("id")
 
-    %Weather{coordinates: coordinates, datetime: weather_datetime, code: weather_code}
+    {weather_condition, _codes} =
+      Enum.find(@conditions, fn {_condition, codes} -> weather_code in codes end)
+
+    %Weather{
+      coordinates: coordinates,
+      datetime: weather_datetime,
+      condition: weather_condition,
+      code: weather_code
+    }
   end
 end

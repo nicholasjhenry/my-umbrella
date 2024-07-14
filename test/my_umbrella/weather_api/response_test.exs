@@ -23,14 +23,26 @@ defmodule MyUmbrella.WeatherApi.ResponseTest do
       actual_current_weather = List.first(weather_data)
 
       utc_2130 = ~U[2000-01-01 21:30:00Z]
-      expected_current_weather = %Weather{coordinates: london, datetime: utc_2130, code: 802}
+
+      expected_current_weather = %Weather{
+        coordinates: london,
+        datetime: utc_2130,
+        condition: :clouds,
+        code: 802
+      }
 
       assert Weather.eq?(expected_current_weather, actual_current_weather)
 
       actual_forecasted_weather = List.last(weather_data)
 
       utc_0100 = ~U[2000-01-02 01:00:00Z]
-      expected_forecasted_weather = %Weather{coordinates: london, datetime: utc_0100, code: 804}
+
+      expected_forecasted_weather = %Weather{
+        coordinates: london,
+        datetime: utc_0100,
+        condition: :clouds,
+        code: 804
+      }
 
       assert Weather.eq?(expected_forecasted_weather, actual_forecasted_weather)
     end
