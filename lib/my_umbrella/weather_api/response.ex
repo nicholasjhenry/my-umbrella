@@ -41,6 +41,7 @@ defmodule MyUmbrella.WeatherApi.Response do
 
     weather_report = %WeatherReport{
       coordinates: london,
+      timezone: "Europe/London",
       weather: [weather]
     }
 
@@ -48,9 +49,9 @@ defmodule MyUmbrella.WeatherApi.Response do
   end
 
   defp parse_weather_report(response) do
-    %{"lat" => lat, "lon" => lon} = response
+    %{"lat" => lat, "lon" => lon, "timezone" => timezone} = response
     coordinates = Coordinates.new(lat, lon)
-    %WeatherReport{coordinates: coordinates}
+    WeatherReport.new(coordinates: coordinates, timezone: timezone)
   end
 
   defp parse_weather(forecast) do
@@ -60,10 +61,10 @@ defmodule MyUmbrella.WeatherApi.Response do
     {weather_condition, _codes} =
       Enum.find(@conditions, fn {_condition, codes} -> weather_code in codes end)
 
-    %Weather{
+    Weather.new(
       date_time: weather_date_time,
       condition: weather_condition,
       code: weather_code
-    }
+    )
   end
 end
