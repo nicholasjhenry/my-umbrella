@@ -1,7 +1,7 @@
 {
   "lat": 51.5098,
   "lon": -0.118,
-  "timezone": "Europe/London",
+  "timezone": "Etc/UTC",
   "timezone_offset": 0,
   "current": {
     "dt": 946762200,

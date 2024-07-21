@@ -41,7 +41,7 @@ defmodule MyUmbrella.WeatherApi.Response do
 
     weather_report = %WeatherReport{
       coordinates: london,
-      time_zone: "Europe/London",
+      time_zone: "Etc/UTC",
       weather: [weather]
     }
 
