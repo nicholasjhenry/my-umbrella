@@ -25,9 +25,11 @@ sequenceDiagram
     Controller->>MyUmbrella: for_today(Coordinates.t())
     MyUmbrella->>WeatherApi: get_forecast(Coordinates.t(), :today)
     WeatherApi-->>MyUmbrella: {:ok, list(WeatherReport.t())}
-    MyUmbrella->>Weather: determine_most_intense_precipitation_condition(list(WeatherReport.t()), :today)
-    Weather-->>MyUmbrella: WeatherReport.t()
-    MyUmbrella->>Announcement: from_weather(Weather.t())
+    MyUmbrella->>WeatherReport: filter(list(WeatherReport.t()), :today)
+    Weather-->>MyUmbrella: list(WeatherReport.t())
+    MyUmbrella->>WeatherReport: determine_most_intense_precipitation_condition(list(WeatherReport.t()), :today)
+    WeatherReport-->>MyUmbrella: WeatherReport.t()
+    MyUmbrella->>Announcement: from_weather_report(WeatherReport.t())
     Announcement-->>MyUmbrella: Annoucement.t() :: String.t()
     MyUmbrella-->>Controller: {:ok, Annoucement.t() :: String.t()}
 ```
