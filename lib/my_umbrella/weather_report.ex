@@ -10,6 +10,7 @@ defmodule MyUmbrella.WeatherReport do
   defstruct [:coordinates, :datetime, :condition, :code]
 
   @type condition :: :atmosphere | :clear | :clouds | :drizzle | :rain | :snow | :thunderstorm
+  @type period :: :today
 
   @type t :: %__MODULE__{
           coordinates: Coordinates.t(),
@@ -24,6 +25,18 @@ defmodule MyUmbrella.WeatherReport do
     rain: 500..531,
     drizzle: 300..321
   ]
+
+  @spec filter_by_same_day([t()], DateTime.t()) :: list(t())
+  def filter_by_same_day(weather_reports, current_datetime) do
+    target_date = DateTime.to_date(current_datetime)
+    Enum.filter(weather_reports, &same_day?(&1.datetime, target_date))
+  end
+
+  defp same_day?(datetime, target_date) do
+    date = DateTime.to_date(datetime)
+
+    Date.compare(date, target_date) == :eq
+  end
 
   @spec determine_most_intense_precipitation_condition(list(t())) :: t() | nil
   def determine_most_intense_precipitation_condition(weather_reports) do
@@ -61,6 +74,7 @@ defmodule MyUmbrella.WeatherReport do
   def eq?(lhs, rhs) do
     lhs.coordinates == rhs.coordinates &&
       DateTime.compare(lhs.datetime, rhs.datetime) == :eq &&
+      lhs.condition == rhs.condition &&
       lhs.code == rhs.code
   end
 end

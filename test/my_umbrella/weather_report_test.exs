@@ -27,6 +27,56 @@ defmodule MyUmbrella.WeatherApi.WeatherReportTest do
     assert WeatherReport.compare(thunderstorm_report, snow_report) == :lt
   end
 
+  describe "filter weather reports for the same day" do
+    test "given an empty list; then returns an empty list" do
+      weather_reports = []
+      current_datetime = ~U[2000-01-01 21:00:00Z]
+
+      actual_weather_reports = WeatherReport.filter_by_same_day(weather_reports, current_datetime)
+
+      refute Enum.any?(actual_weather_reports)
+    end
+
+    test "given a single weather report before midnight; then includes report" do
+      london = Coordinates.new(51.5098, -0.118)
+      utc_2130 = ~U[2000-01-01 21:30:00Z]
+
+      single_weather_report = %WeatherReport{
+        coordinates: london,
+        datetime: utc_2130,
+        code: 500,
+        condition: :rain
+      }
+
+      weather_reports = [single_weather_report]
+      current_datetime = ~U[2000-01-01 21:00:00Z]
+
+      actual_weather_reports = WeatherReport.filter_by_same_day(weather_reports, current_datetime)
+
+      assert [actual_weather_report] = actual_weather_reports
+      assert WeatherReport.eq?(actual_weather_report, single_weather_report)
+    end
+
+    test "given a single weather report after midnight; then excludes that report" do
+      london = Coordinates.new(51.5098, -0.118)
+      utc_0030 = ~U[2000-01-02 00:30:00Z]
+
+      single_weather_report = %WeatherReport{
+        coordinates: london,
+        datetime: utc_0030,
+        code: 500,
+        condition: :rain
+      }
+
+      weather_reports = [single_weather_report]
+      current_datetime = ~U[2000-01-01 21:00:00Z]
+
+      actual_weather_reports = WeatherReport.filter_by_same_day(weather_reports, current_datetime)
+
+      refute Enum.any?(actual_weather_reports)
+    end
+  end
+
   describe "determining the most intense precipitation condition" do
     test "given an empty list; then returns nothing" do
       weather_reports = []
