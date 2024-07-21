@@ -22,12 +22,12 @@ MyUmbrella.for_today(orlando)
 
 ```mermaid
 sequenceDiagram
-    Controller->>MyUmbrella: for_today(location :: {lat :: float(), lon :: float()})
-    MyUmbrella->>WeatherApi: get_forecast(location, :hourly)
-    WeatherApi-->>MyUmbrella: {:ok, list(Weather.t())}
-    MyUmbrella->>Weather: determine_most_intense_condition(list(Weather.t()), :today)
-    Weather-->>MyUmbrella: Weather.t()
-    MyUmbrella->>Announcement: from_weather(list(Weather.t()))
+    Controller->>MyUmbrella: for_today(Coordinates.t())
+    MyUmbrella->>WeatherApi: get_forecast(Coordinates.t(), :today)
+    WeatherApi-->>MyUmbrella: {:ok, list(WeatherReport.t())}
+    MyUmbrella->>Weather: determine_most_intense_condition(list(WeatherReport.t()), :today)
+    Weather-->>MyUmbrella: WeatherReport.t()
+    MyUmbrella->>Announcement: from_weather(Weather.t())
     Announcement-->>MyUmbrella: Annoucement.t() :: String.t()
     MyUmbrella-->>Controller: {:ok, Annoucement.t() :: String.t()}
 ```
