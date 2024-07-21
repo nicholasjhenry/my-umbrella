@@ -35,8 +35,8 @@ defmodule MyUmbrella.WeatherApi.Response do
 
     weather = %Weather{
       date_time: ~U[1970-01-01 00:00:00Z],
-      condition: :clear,
-      code: 800
+      condition: :rain,
+      code: 500
     }
 
     weather_report = %WeatherReport{

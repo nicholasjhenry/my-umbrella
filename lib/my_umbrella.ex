@@ -5,6 +5,7 @@ defmodule MyUmbrella do
 
   alias MyUmbrella.Coordinates
   alias MyUmbrella.Precipitation
+  alias MyUmbrella.Weather
   alias MyUmbrella.WeatherApi
 
   defmodule Announcement do
@@ -19,7 +20,7 @@ defmodule MyUmbrella do
   def for_today(coordinates, weather_api) do
     with {:ok, response} <- weather_api.get_forecast(coordinates, :today),
          {:ok, weather_report} <- WeatherApi.Response.to_weather_report(response),
-         _most_intense_precipitation_condition <-
+         %Weather{} = _weather <-
            Precipitation.determine_most_intense_precipitation_condition(weather_report) do
       {:ok, "Nah, all good"}
     end
