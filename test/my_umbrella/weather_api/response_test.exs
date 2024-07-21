@@ -26,7 +26,7 @@ defmodule MyUmbrella.WeatherApi.ResponseTest do
 
       expected_current_weather_report = %WeatherReport{
         coordinates: london,
-        datetime: utc_2130,
+        date_time: utc_2130,
         condition: :clouds,
         code: 802
       }
@@ -39,7 +39,7 @@ defmodule MyUmbrella.WeatherApi.ResponseTest do
 
       expected_forecasted_weather_report = %WeatherReport{
         coordinates: london,
-        datetime: utc_0100,
+        date_time: utc_0100,
         condition: :clouds,
         code: 804
       }

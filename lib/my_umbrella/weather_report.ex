@@ -5,16 +5,16 @@ defmodule MyUmbrella.WeatherReport do
   """
   alias MyUmbrella.Coordinates
 
-  @enforce_keys [:coordinates, :datetime, :condition, :code]
+  @enforce_keys [:coordinates, :date_time, :condition, :code]
 
-  defstruct [:coordinates, :datetime, :condition, :code]
+  defstruct [:coordinates, :date_time, :condition, :code]
 
   @type condition :: :atmosphere | :clear | :clouds | :drizzle | :rain | :snow | :thunderstorm
   @type period :: :today
 
   @type t :: %__MODULE__{
           coordinates: Coordinates.t(),
-          datetime: DateTime.t(),
+          date_time: DateTime.t(),
           condition: condition(),
           code: integer()
         }
@@ -27,13 +27,13 @@ defmodule MyUmbrella.WeatherReport do
   ]
 
   @spec filter_by_same_day([t()], DateTime.t()) :: list(t())
-  def filter_by_same_day(weather_reports, current_datetime) do
-    target_date = DateTime.to_date(current_datetime)
-    Enum.filter(weather_reports, &same_day?(&1.datetime, target_date))
+  def filter_by_same_day(weather_reports, current_date_time) do
+    target_date = DateTime.to_date(current_date_time)
+    Enum.filter(weather_reports, &same_day?(&1.date_time, target_date))
   end
 
-  defp same_day?(datetime, target_date) do
-    date = DateTime.to_date(datetime)
+  defp same_day?(date_time, target_date) do
+    date = DateTime.to_date(date_time)
 
     Date.compare(date, target_date) == :eq
   end
@@ -73,7 +73,7 @@ defmodule MyUmbrella.WeatherReport do
   @spec eq?(t(), t()) :: boolean()
   def eq?(lhs, rhs) do
     lhs.coordinates == rhs.coordinates &&
-      DateTime.compare(lhs.datetime, rhs.datetime) == :eq &&
+      DateTime.compare(lhs.date_time, rhs.date_time) == :eq &&
       lhs.condition == rhs.condition &&
       lhs.code == rhs.code
   end

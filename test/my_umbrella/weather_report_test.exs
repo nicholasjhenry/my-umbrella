@@ -10,14 +10,14 @@ defmodule MyUmbrella.WeatherApi.WeatherReportTest do
 
     snow_report = %WeatherReport{
       coordinates: london,
-      datetime: utc_2130,
+      date_time: utc_2130,
       code: 600,
       condition: :snow
     }
 
     thunderstorm_report = %WeatherReport{
       coordinates: london,
-      datetime: utc_2130,
+      date_time: utc_2130,
       code: 200,
       condition: :thunderstorm
     }
@@ -30,9 +30,10 @@ defmodule MyUmbrella.WeatherApi.WeatherReportTest do
   describe "filter weather reports for the same day" do
     test "given an empty list; then returns an empty list" do
       weather_reports = []
-      current_datetime = ~U[2000-01-01 21:00:00Z]
+      current_date_time = ~U[2000-01-01 21:00:00Z]
 
-      actual_weather_reports = WeatherReport.filter_by_same_day(weather_reports, current_datetime)
+      actual_weather_reports =
+        WeatherReport.filter_by_same_day(weather_reports, current_date_time)
 
       refute Enum.any?(actual_weather_reports)
     end
@@ -43,15 +44,16 @@ defmodule MyUmbrella.WeatherApi.WeatherReportTest do
 
       single_weather_report = %WeatherReport{
         coordinates: london,
-        datetime: utc_2130,
+        date_time: utc_2130,
         code: 500,
         condition: :rain
       }
 
       weather_reports = [single_weather_report]
-      current_datetime = ~U[2000-01-01 21:00:00Z]
+      current_date_time = ~U[2000-01-01 21:00:00Z]
 
-      actual_weather_reports = WeatherReport.filter_by_same_day(weather_reports, current_datetime)
+      actual_weather_reports =
+        WeatherReport.filter_by_same_day(weather_reports, current_date_time)
 
       assert [actual_weather_report] = actual_weather_reports
       assert WeatherReport.eq?(actual_weather_report, single_weather_report)
@@ -63,15 +65,16 @@ defmodule MyUmbrella.WeatherApi.WeatherReportTest do
 
       single_weather_report = %WeatherReport{
         coordinates: london,
-        datetime: utc_0030,
+        date_time: utc_0030,
         code: 500,
         condition: :rain
       }
 
       weather_reports = [single_weather_report]
-      current_datetime = ~U[2000-01-01 21:00:00Z]
+      current_date_time = ~U[2000-01-01 21:00:00Z]
 
-      actual_weather_reports = WeatherReport.filter_by_same_day(weather_reports, current_datetime)
+      actual_weather_reports =
+        WeatherReport.filter_by_same_day(weather_reports, current_date_time)
 
       refute Enum.any?(actual_weather_reports)
     end
@@ -90,7 +93,7 @@ defmodule MyUmbrella.WeatherApi.WeatherReportTest do
 
       single_weather_report = %WeatherReport{
         coordinates: london,
-        datetime: utc_2130,
+        date_time: utc_2130,
         code: 500,
         condition: :rain
       }
@@ -109,7 +112,7 @@ defmodule MyUmbrella.WeatherApi.WeatherReportTest do
 
       single_weather_report = %WeatherReport{
         coordinates: london,
-        datetime: utc_2130,
+        date_time: utc_2130,
         condition: :clear,
         code: 800
       }
@@ -128,21 +131,21 @@ defmodule MyUmbrella.WeatherApi.WeatherReportTest do
 
       drizzle_report = %WeatherReport{
         coordinates: london,
-        datetime: utc_2130,
+        date_time: utc_2130,
         condition: :drizzle,
         code: 300
       }
 
       thunderstorm_report = %WeatherReport{
         coordinates: london,
-        datetime: utc_2130,
+        date_time: utc_2130,
         condition: :thunderstorm,
         code: 200
       }
 
       rain_report = %WeatherReport{
         coordinates: london,
-        datetime: utc_2130,
+        date_time: utc_2130,
         condition: :rain,
         code: 500
       }

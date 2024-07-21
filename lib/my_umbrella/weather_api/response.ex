@@ -33,7 +33,7 @@ defmodule MyUmbrella.WeatherApi.Response do
 
     weather = %WeatherReport{
       coordinates: london,
-      datetime: ~U[1970-01-01 00:00:00Z],
+      date_time: ~U[1970-01-01 00:00:00Z],
       condition: :clear,
       code: 800
     }
@@ -44,7 +44,7 @@ defmodule MyUmbrella.WeatherApi.Response do
   defp parse_forecast(response, forecast) do
     %{"lat" => lat, "lon" => lon} = response
     coordinates = Coordinates.new(lat, lon)
-    weather_datetime = forecast |> Map.fetch!("dt") |> DateTime.from_unix!()
+    weather_date_time = forecast |> Map.fetch!("dt") |> DateTime.from_unix!()
     weather_code = forecast |> Map.fetch!("weather") |> List.first() |> Map.fetch!("id")
 
     {weather_condition, _codes} =
@@ -52,7 +52,7 @@ defmodule MyUmbrella.WeatherApi.Response do
 
     %WeatherReport{
       coordinates: coordinates,
-      datetime: weather_datetime,
+      date_time: weather_date_time,
       condition: weather_condition,
       code: weather_code
     }
