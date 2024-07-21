@@ -6,15 +6,15 @@ defmodule MyUmbrella.WeatherReport do
   alias MyUmbrella.Coordinates
   alias MyUmbrella.Weather
 
-  @enforce_keys [:coordinates, :timezone]
+  @enforce_keys [:coordinates, :time_zone]
 
-  defstruct coordinates: nil, timezone: nil, weather: []
+  defstruct coordinates: nil, time_zone: nil, weather: []
 
   @type condition :: :atmosphere | :clear | :clouds | :drizzle | :rain | :snow | :thunderstorm
 
   @type t :: %__MODULE__{
           coordinates: Coordinates.t(),
-          timezone: Calendar.time_zone(),
+          time_zone: Calendar.time_zone(),
           weather: list(Weather.t())
         }
 

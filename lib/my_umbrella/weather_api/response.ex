@@ -41,7 +41,7 @@ defmodule MyUmbrella.WeatherApi.Response do
 
     weather_report = %WeatherReport{
       coordinates: london,
-      timezone: "Europe/London",
+      time_zone: "Europe/London",
       weather: [weather]
     }
 
@@ -49,9 +49,9 @@ defmodule MyUmbrella.WeatherApi.Response do
   end
 
   defp parse_weather_report(response) do
-    %{"lat" => lat, "lon" => lon, "timezone" => timezone} = response
+    %{"lat" => lat, "lon" => lon, "timezone" => time_zone} = response
     coordinates = Coordinates.new(lat, lon)
-    WeatherReport.new(coordinates: coordinates, timezone: timezone)
+    WeatherReport.new(coordinates: coordinates, time_zone: time_zone)
   end
 
   defp parse_weather(forecast) do

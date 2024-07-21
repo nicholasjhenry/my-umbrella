@@ -31,7 +31,7 @@ defmodule MyUmbrella.PrecipitationTest do
 
     test "given an empty list; then returns nothing" do
       london = Coordinates.new(51.5098, -0.118)
-      weather_report = WeatherReport.new(coordinates: london, timezone: "Europe/London")
+      weather_report = WeatherReport.new(coordinates: london, time_zone: "Europe/London")
 
       precipitation = Precipitation.determine_most_intense_precipitation_condition(weather_report)
       refute precipitation
@@ -43,7 +43,7 @@ defmodule MyUmbrella.PrecipitationTest do
       utc_2130 = ~U[2000-01-01 21:30:00Z]
 
       weather_report =
-        WeatherReport.new(coordinates: london, timezone: "Europe/London")
+        WeatherReport.new(coordinates: london, time_zone: "Europe/London")
         |> WeatherReport.add_weather(
           date_time: utc_2130,
           code: 500,
@@ -68,7 +68,7 @@ defmodule MyUmbrella.PrecipitationTest do
       utc_2130 = ~U[2000-01-01 21:30:00Z]
 
       weather_report =
-        WeatherReport.new(coordinates: london, timezone: "Europe/London")
+        WeatherReport.new(coordinates: london, time_zone: "Europe/London")
         |> WeatherReport.add_weather(
           date_time: utc_2130,
           code: 800,
@@ -87,7 +87,7 @@ defmodule MyUmbrella.PrecipitationTest do
       utc_2130 = ~U[2000-01-01 21:30:00Z]
 
       weather_report =
-        WeatherReport.new(coordinates: london, timezone: "Europe/London")
+        WeatherReport.new(coordinates: london, time_zone: "Europe/London")
         |> WeatherReport.add_weather(
           date_time: utc_2130,
           condition: :drizzle,

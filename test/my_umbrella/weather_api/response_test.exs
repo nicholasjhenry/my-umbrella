@@ -19,7 +19,7 @@ defmodule MyUmbrella.WeatherApi.ResponseTest do
 
       london = Coordinates.new(51.5098, -0.118)
       assert weather_report.coordinates == london
-      assert weather_report.timezone == "Europe/London"
+      assert weather_report.time_zone == "Europe/London"
 
       assert Enum.count(weather_report.weather) == 5
       utc_2130 = ~U[2000-01-01 21:30:00Z]
