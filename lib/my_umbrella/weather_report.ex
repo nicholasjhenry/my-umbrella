@@ -28,12 +28,12 @@ defmodule MyUmbrella.WeatherReport do
   @spec determine_most_intense_precipitation_condition(list(t())) :: t() | nil
   def determine_most_intense_precipitation_condition(weather_reports) do
     weather_reports
-    |> Enum.filter(&perciptation?/1)
+    |> Enum.filter(&preciptation?/1)
     |> Enum.sort_by(& &1, {:desc, __MODULE__})
     |> List.first()
   end
 
-  defp perciptation?(weather) do
+  defp preciptation?(weather) do
     @precipitation_conditions
     |> Keyword.values()
     |> Enum.any?(&(weather.code in &1))
