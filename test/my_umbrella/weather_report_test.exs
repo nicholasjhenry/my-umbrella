@@ -72,7 +72,7 @@ defmodule MyUmbrella.WeatherApi.WeatherReportTest do
       refute weather_report
     end
 
-    test "given a multiple weather reports with precipitation; then returns the most intense weather report" do
+    test "given multiple weather reports with precipitation; then returns the most intense weather report" do
       london = Coordinates.new(51.5098, -0.118)
       utc_2130 = ~U[2000-01-01 21:30:00Z]
 
