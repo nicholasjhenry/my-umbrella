@@ -9,13 +9,14 @@ defmodule MyUmbrella do
   alias MyUmbrella.WeatherReport
 
   @spec for_today(Coordinates.t()) :: {:ok, Precipitation.t()} | {:error, term}
-  def for_today(coordinates) do
+  @spec for_today(Coordinates.t(), DateTime.t()) :: {:ok, Precipitation.t()} | {:error, term}
+  def for_today(coordinates, current_date_time_utc \\ DateTime.utc_now()) do
     with {:ok, response} <- WeatherApi.get_forecast(coordinates, :today),
          {:ok, weather_report} <- WeatherApi.Response.to_weather_report(response),
-         current_date_time =
-           DateTime.shift_zone!(~U[2000-01-01 21:30:00Z], weather_report.time_zone),
+         current_date_time_in_time_zone =
+           DateTime.shift_zone!(current_date_time_utc, weather_report.time_zone),
          weather_report_for_today <-
-           WeatherReport.filter_by_same_day(weather_report, current_date_time) do
+           WeatherReport.filter_by_same_day(weather_report, current_date_time_in_time_zone) do
       maybe_precipitation =
         Precipitation.determine_most_intense_precipitation_condition(weather_report_for_today)
 
