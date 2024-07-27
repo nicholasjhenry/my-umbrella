@@ -14,6 +14,11 @@ defmodule MyUmbrella.WeatherApi do
 
   @spec get_forecast(coordinates, duration :: :today) :: {:ok, Response.t()}
   def get_forecast(@orlando, :today) do
-    {:ok, %{}}
+    project_path = Mix.Project.project_file() |> Path.dirname()
+    fixture_path = Path.join([project_path, "test/fixtures"])
+    fixture_pathname = Path.join([fixture_path, "response/success.json"])
+    response = fixture_pathname |> File.read!() |> :json.decode()
+
+    {:ok, response}
   end
 end

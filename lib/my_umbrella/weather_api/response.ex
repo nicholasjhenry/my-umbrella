@@ -30,24 +30,6 @@ defmodule MyUmbrella.WeatherApi.Response do
     {:ok, %{weather_report | weather: [current_weather | forecasted_weather]}}
   end
 
-  def to_weather_report(_response) do
-    london = Coordinates.new(51.5098, -0.118)
-
-    weather = %Weather{
-      date_time: ~U[1970-01-01 00:00:00Z],
-      condition: :rain,
-      code: 500
-    }
-
-    weather_report = %WeatherReport{
-      coordinates: london,
-      time_zone: "Etc/UTC",
-      weather: [weather]
-    }
-
-    {:ok, weather_report}
-  end
-
   defp parse_weather_report(response) do
     %{"lat" => lat, "lon" => lon, "timezone" => time_zone} = response
     coordinates = Coordinates.new(lat, lon)
