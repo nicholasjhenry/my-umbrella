@@ -3,13 +3,12 @@ defmodule MyUmbrellaTest do
 
   alias MyUmbrella.Coordinates
   alias MyUmbrella.Weather
-  alias MyUmbrella.WeatherApi
 
   describe "determine if an umbrella is needed today" do
     test "given it IS raining before end-of-day; then an umbrella IS needed" do
       london = Coordinates.new(51.5098, -0.118)
 
-      weather_result = MyUmbrella.for_today(london, WeatherApi)
+      weather_result = MyUmbrella.for_today(london)
 
       expected_weather =
         Weather.new(date_time: ~U[2000-01-01 22:00:00Z], condition: :rain, code: 501)
@@ -21,7 +20,7 @@ defmodule MyUmbrellaTest do
     test "given it IS NOT raining before end-of-day; then an umbrella IS NOT needed" do
       orlando = Coordinates.new(28.5383, -81.3792)
 
-      weather_result = MyUmbrella.for_today(orlando, WeatherApi)
+      weather_result = MyUmbrella.for_today(orlando)
 
       assert {:ok, :no_precipitation} == weather_result
     end

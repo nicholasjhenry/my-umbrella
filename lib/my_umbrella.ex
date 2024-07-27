@@ -8,9 +8,9 @@ defmodule MyUmbrella do
   alias MyUmbrella.WeatherApi
   alias MyUmbrella.WeatherReport
 
-  @spec for_today(Coordinates.t(), module()) :: {:ok, Precipitation.t()} | {:error, term}
-  def for_today(coordinates, weather_api) do
-    with {:ok, response} <- weather_api.get_forecast(coordinates, :today),
+  @spec for_today(Coordinates.t()) :: {:ok, Precipitation.t()} | {:error, term}
+  def for_today(coordinates) do
+    with {:ok, response} <- WeatherApi.get_forecast(coordinates, :today),
          {:ok, weather_report} <- WeatherApi.Response.to_weather_report(response),
          current_date_time =
            DateTime.shift_zone!(~U[2000-01-01 21:30:00Z], weather_report.time_zone),
