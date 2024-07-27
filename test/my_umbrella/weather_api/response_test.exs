@@ -1,17 +1,15 @@
 defmodule MyUmbrella.WeatherApi.ResponseTest do
-  use ExUnit.Case
+  use MyUmbrella.TestCase
 
   alias MyUmbrella.Coordinates
   alias MyUmbrella.Weather
   alias MyUmbrella.WeatherApi.Response
 
-  project_path = Mix.Project.project_file() |> Path.dirname()
-  fixture_path = Path.join([project_path, "test/support/fixtures"])
-  @fixture_pathname Path.join([fixture_path, "response/success.json"])
-
   describe "converting a response" do
-    test "given an API response; returns a weather report for current and forecasted conditions" do
-      response = @fixture_pathname |> File.read!() |> :json.decode()
+    test "given an API response; returns a weather report for current and forecasted conditions",
+         %{fixture_path: fixture_path} do
+      fixture_pathname = Path.join([fixture_path, "response/success.json"])
+      response = fixture_pathname |> File.read!() |> :json.decode()
 
       result = Response.to_weather_report(response)
 
