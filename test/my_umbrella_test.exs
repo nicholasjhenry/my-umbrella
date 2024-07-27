@@ -19,12 +19,15 @@ defmodule MyUmbrellaTest do
     end)
   end
 
+  setup :verify_on_exit!
+
   describe "determine if an umbrella is needed today" do
     test "given it IS raining before end-of-day; then an umbrella IS needed" do
       london = Coordinates.new(51.5098, -0.118)
       current_date_time_utc = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "Etc/UTC")
 
-      stub(MyUmbrella.WeatherApi.Mock, :get_forecast, fn coordinates, :today ->
+      expect(MyUmbrella.WeatherApi.Mock, :get_forecast, fn coordinates, :today ->
+        assert london == coordinates
         {lat, lon} = coordinates
 
         response = %{
@@ -74,7 +77,8 @@ defmodule MyUmbrellaTest do
         DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "America/New_York")
         |> DateTime.shift_zone!("Etc/UTC")
 
-      stub(MyUmbrella.WeatherApi.Mock, :get_forecast, fn coordinates, :today ->
+      expect(MyUmbrella.WeatherApi.Mock, :get_forecast, fn coordinates, :today ->
+        assert orlando == coordinates
         {lat, lon} = coordinates
 
         response = %{
