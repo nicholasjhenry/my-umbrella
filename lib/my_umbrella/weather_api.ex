@@ -6,12 +6,12 @@ defmodule MyUmbrella.WeatherApi do
   - Weather Conditions: https://openweathermap.org/weather-conditions
   """
 
-  alias MyUmbrella.WeatherApi.Response
+  @behaviour MyUmbrella.WeatherApi.Behaviour
 
-  @type coordinates :: {float(), float()}
+  @impl true
+  def get_forecast(coordinates, duration), do: impl().get_forecast(coordinates, duration)
 
-  @spec get_forecast(coordinates, duration :: :today) :: {:ok, Response.t()}
-  def get_forecast(_coordinates, :today) do
-    raise RuntimeError, "Not Implemented"
+  defp impl do
+    Application.get_env(:my_umbrella, :weather_api_module, MyUmbrella.WeatherApi.Http)
   end
 end

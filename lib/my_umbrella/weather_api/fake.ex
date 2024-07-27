@@ -1,14 +1,12 @@
 defmodule MyUmbrella.WeatherApi.Fake do
   @moduledoc false
 
-  alias MyUmbrella.WeatherApi.Response
-
-  @type coordinates :: {float(), float()}
+  @behaviour MyUmbrella.WeatherApi.Behaviour
 
   @orlando {28.5383, -81.3792}
   @london {51.5098, -0.118}
 
-  @spec get_forecast(coordinates, duration :: :today) :: {:ok, Response.t()}
+  @impl true
   def get_forecast(@london, :today) do
     project_path = Mix.Project.project_file() |> Path.dirname()
     fixture_path = Path.join([project_path, "test/fixtures"])
