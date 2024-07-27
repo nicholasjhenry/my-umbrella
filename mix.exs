@@ -9,7 +9,8 @@ defmodule MyUmbrella.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      dialyzer: dialyzer()
     ]
   end
 
@@ -33,5 +34,11 @@ defmodule MyUmbrella.MixProject do
 
   defp aliases do
     [check: ["credo --strict", "dialyzer"]]
+  end
+
+  defp dialyzer do
+    [
+      plt_add_apps: [:mix]
+    ]
   end
 end

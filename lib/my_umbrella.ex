@@ -3,10 +3,10 @@ defmodule MyUmbrella do
   A context module.
   """
 
-  alias MyUmbrella.WeatherReport
   alias MyUmbrella.Coordinates
   alias MyUmbrella.Precipitation
   alias MyUmbrella.WeatherApi
+  alias MyUmbrella.WeatherReport
 
   defmodule Announcement do
     @moduledoc """
