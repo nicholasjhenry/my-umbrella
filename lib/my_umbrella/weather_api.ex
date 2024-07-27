@@ -7,11 +7,12 @@ defmodule MyUmbrella.WeatherApi do
   """
 
   @behaviour MyUmbrella.WeatherApi.Behaviour
-
+  @weather_api_module Application.compile_env(
+                        :my_umbrella,
+                        :weather_api_module,
+                        MyUmbrella.WeatherApi.Http
+                      )
   @impl true
-  def get_forecast(coordinates, duration), do: impl().get_forecast(coordinates, duration)
-
-  defp impl do
-    Application.get_env(:my_umbrella, :weather_api_module, MyUmbrella.WeatherApi.Http)
-  end
+  def get_forecast(coordinates, duration),
+    do: @weather_api_module.get_forecast(coordinates, duration)
 end

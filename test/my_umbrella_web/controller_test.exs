@@ -7,19 +7,6 @@ defmodule MyUmbrellaWeb.ControllerTest do
 
   import Mox
 
-  setup do
-    # NOTE: As the application environment is a global, the test case cannot be asynchronous
-    Application.put_env(:my_umbrella, :weather_api_module, MyUmbrella.WeatherApi.Mock)
-
-    on_exit(fn ->
-      Application.put_env(
-        :my_umbrella,
-        :weather_api_module,
-        MyUmbrella.WeatherApi
-      )
-    end)
-  end
-
   describe "determining if an umbrella is required today" do
     test "given it IS raining before end-of-day; then an umbrella IS needed", %{conn: conn} do
       london = Coordinates.new(51.5098, -0.118)

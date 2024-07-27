@@ -6,19 +6,6 @@ defmodule MyUmbrellaTest do
 
   import Mox
 
-  setup do
-    # NOTE: As the application environment is a global, the test case cannot be asynchronous
-    Application.put_env(:my_umbrella, :weather_api_module, MyUmbrella.WeatherApi.Mock)
-
-    on_exit(fn ->
-      Application.put_env(
-        :my_umbrella,
-        :weather_api_module,
-        MyUmbrella.WeatherApi
-      )
-    end)
-  end
-
   setup :verify_on_exit!
 
   describe "determine if an umbrella is needed today" do
