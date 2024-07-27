@@ -33,11 +33,10 @@ defmodule MyUmbrella.PrecipitationTest do
       london = Coordinates.new(51.5098, -0.118)
       weather_report = WeatherReport.new(coordinates: london, time_zone: "Etc/UTC")
 
-      precipitation = Precipitation.determine_most_intense_precipitation_condition(weather_report)
-      refute precipitation
+      result = Precipitation.determine_most_intense_precipitation_condition(weather_report)
+      assert result == :no_precipitation
     end
 
-    @tag :wip
     test "given a single weather report with precipitation; then returns that weather report" do
       london = Coordinates.new(51.5098, -0.118)
       utc_2130 = ~U[2000-01-01 21:30:00Z]
@@ -50,19 +49,18 @@ defmodule MyUmbrella.PrecipitationTest do
           condition: :rain
         )
 
-      actual_precipitation =
-        Precipitation.determine_most_intense_precipitation_condition(weather_report)
+      result = Precipitation.determine_most_intense_precipitation_condition(weather_report)
 
-      expected_precipitation = %Weather{
+      expected_weather = %Weather{
         date_time: utc_2130,
         code: 500,
         condition: :rain
       }
 
-      assert Weather.eq?(actual_precipitation, expected_precipitation)
+      assert {:precipitation, actual_weather} = result
+      assert Weather.eq?(actual_weather, expected_weather)
     end
 
-    @tag :wip
     test "given a single weather report with no precipitation; then returns nothing" do
       london = Coordinates.new(51.5098, -0.118)
       utc_2130 = ~U[2000-01-01 21:30:00Z]
@@ -75,13 +73,11 @@ defmodule MyUmbrella.PrecipitationTest do
           condition: :clear
         )
 
-      precipitation =
-        Precipitation.determine_most_intense_precipitation_condition(weather_report)
+      result = Precipitation.determine_most_intense_precipitation_condition(weather_report)
 
-      refute precipitation
+      assert :no_precipitation == result
     end
 
-    @tag :wip
     test "given multiple weather reports with precipitation; then returns the most intense weather report" do
       london = Coordinates.new(51.5098, -0.118)
       utc_2130 = ~U[2000-01-01 21:30:00Z]
@@ -104,17 +100,18 @@ defmodule MyUmbrella.PrecipitationTest do
           code: 500
         )
 
-      actual_precipitation =
+      result =
         Precipitation.determine_most_intense_precipitation_condition(weather_report)
 
-      expected_precipitation =
+      expected_weather =
         Weather.new(
           date_time: utc_2130,
           condition: :thunderstorm,
           code: 200
         )
 
-      assert Weather.eq?(expected_precipitation, actual_precipitation)
+      assert {:precipitation, actual_weather} = result
+      assert Weather.eq?(expected_weather, actual_weather)
     end
   end
 end

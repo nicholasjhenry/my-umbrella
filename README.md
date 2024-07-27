@@ -29,10 +29,10 @@ sequenceDiagram
     MyUmbrella->>WeatherReport: filter_by_same_day(list(WeatherReport.t()), DateTime.t())
     WeatherReport-->>MyUmbrella: list(WeatherReport.t())
     MyUmbrella->>Precipitation: determine_most_intense_precipitation_condition(list(WeatherReport.t()), :today)
-    Precipitation-->>MyUmbrella: Weather.t()
-    MyUmbrella-->>Controller: {:ok, Weather.t()}
-    Controller->>MyUmbrella: announce(Weather.t())
-    MyUmbrella->>Announcement: from_weather_report(Weather.t())
+    Precipitation-->>MyUmbrella: Precipitation.t()
+    MyUmbrella-->>Controller: {:ok, Precipitation.t()}
+    Controller->>MyUmbrella: announce(Precipitation.t())
+    MyUmbrella->>Announcement: to_announcement(Precipitation.t())
     Announcement-->>MyUmbrella: Annoucement.t()
     MyUmbrella-->>Controller: Annoucement.t()
 ```

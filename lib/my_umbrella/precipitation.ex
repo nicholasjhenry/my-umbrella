@@ -4,21 +4,10 @@ defmodule MyUmbrella.Precipitation do
   falls from the atmosphere and reaches the ground, such as rain, snow, sleet, or hail.
   """
 
-  alias MyUmbrella.Coordinates
+  alias MyUmbrella.Weather
   alias MyUmbrella.WeatherReport
 
-  @enforce_keys [:coordinates, :date_time, :condition, :code]
-
-  defstruct [:coordinates, :date_time, :condition, :code]
-
-  @type condition :: :drizzle | :rain | :snow | :thunderstorm
-
-  @type t :: %__MODULE__{
-          coordinates: Coordinates.t(),
-          date_time: DateTime.t(),
-          condition: condition(),
-          code: integer()
-        }
+  @type t :: {:precipitation, Weather.t()} | :no_precipitation
 
   @precipitation_conditions [
     snow: 600..622,
@@ -27,12 +16,21 @@ defmodule MyUmbrella.Precipitation do
     drizzle: 300..321
   ]
 
-  @spec determine_most_intense_precipitation_condition(WeatherReport.t()) :: t() | nil
+  @spec determine_most_intense_precipitation_condition(WeatherReport.t()) :: t()
   def determine_most_intense_precipitation_condition(weather_report) do
-    weather_report.weather
-    |> Enum.filter(&preciptation?/1)
-    |> Enum.sort_by(& &1, {:desc, __MODULE__})
-    |> List.first()
+    maybe_weather =
+      weather_report.weather
+      |> Enum.filter(&preciptation?/1)
+      |> Enum.sort_by(& &1, {:desc, __MODULE__})
+      |> List.first()
+
+    case maybe_weather do
+      %Weather{} = weather ->
+        {:precipitation, weather}
+
+      nil ->
+        :no_precipitation
+    end
   end
 
   defp preciptation?(weather) do
