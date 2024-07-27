@@ -4,10 +4,59 @@ defmodule MyUmbrellaTest do
   alias MyUmbrella.Coordinates
   alias MyUmbrella.Weather
 
+  import Mox
+
+  setup do
+    # NOTE: As the application environment is a global, the test case cannot be asynchronous
+    Application.put_env(:my_umbrella, :weather_api_module, MyUmbrella.WeatherApi.Mock)
+
+    on_exit(fn ->
+      Application.put_env(
+        :my_umbrella,
+        :weather_api_module,
+        MyUmbrella.WeatherApi
+      )
+    end)
+  end
+
   describe "determine if an umbrella is needed today" do
     test "given it IS raining before end-of-day; then an umbrella IS needed" do
       london = Coordinates.new(51.5098, -0.118)
       current_date_time_utc = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "Etc/UTC")
+
+      stub(MyUmbrella.WeatherApi.Mock, :get_forecast, fn coordinates, :today ->
+        {lat, lon} = coordinates
+
+        response = %{
+          "lat" => lat,
+          "lon" => lon,
+          "timezone" => "Etc/UTC",
+          "current" => %{
+            "dt" => 946_762_200,
+            "weather" => [
+              %{
+                "id" => 802,
+                "main" => "Clouds",
+                "description" => "scattered clouds"
+              }
+            ]
+          },
+          "hourly" => [
+            %{
+              "dt" => 946_764_000,
+              "weather" => [
+                %{
+                  "id" => 501,
+                  "main" => "Rain",
+                  "description" => "moderate rain"
+                }
+              ]
+            }
+          ]
+        }
+
+        {:ok, response}
+      end)
 
       weather_result = MyUmbrella.for_today(london, current_date_time_utc)
 
@@ -24,6 +73,40 @@ defmodule MyUmbrellaTest do
       current_date_time_utc =
         DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "America/New_York")
         |> DateTime.shift_zone!("Etc/UTC")
+
+      stub(MyUmbrella.WeatherApi.Mock, :get_forecast, fn coordinates, :today ->
+        {lat, lon} = coordinates
+
+        response = %{
+          "lat" => lat,
+          "lon" => lon,
+          "timezone" => "America/New_York",
+          "current" => %{
+            "dt" => 946_762_200,
+            "weather" => [
+              %{
+                "id" => 803,
+                "main" => "Clouds",
+                "description" => "broken clouds"
+              }
+            ]
+          },
+          "hourly" => [
+            %{
+              "dt" => 946_764_000,
+              "weather" => [
+                %{
+                  "id" => 803,
+                  "main" => "Clouds",
+                  "description" => "broken clouds"
+                }
+              ]
+            }
+          ]
+        }
+
+        {:ok, response}
+      end)
 
       weather_result = MyUmbrella.for_today(orlando, current_date_time_utc)
 

@@ -5,11 +5,60 @@ defmodule MyUmbrellaWeb.ControllerTest do
 
   alias MyUmbrellaWeb.Controller
 
+  import Mox
+
+  setup do
+    # NOTE: As the application environment is a global, the test case cannot be asynchronous
+    Application.put_env(:my_umbrella, :weather_api_module, MyUmbrella.WeatherApi.Mock)
+
+    on_exit(fn ->
+      Application.put_env(
+        :my_umbrella,
+        :weather_api_module,
+        MyUmbrella.WeatherApi
+      )
+    end)
+  end
+
   describe "determining if an umbrella is required today" do
     test "given it IS raining before end-of-day; then an umbrella IS needed", %{conn: conn} do
       london = Coordinates.new(51.5098, -0.118)
       current_date_time_utc = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "Etc/UTC")
       conn = Plug.Conn.assign(conn, :current_date_time_utc, current_date_time_utc)
+
+      stub(MyUmbrella.WeatherApi.Mock, :get_forecast, fn coordinates, :today ->
+        {lat, lon} = coordinates
+
+        response = %{
+          "lat" => lat,
+          "lon" => lon,
+          "timezone" => "Etc/UTC",
+          "current" => %{
+            "dt" => 946_762_200,
+            "weather" => [
+              %{
+                "id" => 802,
+                "main" => "Clouds",
+                "description" => "scattered clouds"
+              }
+            ]
+          },
+          "hourly" => [
+            %{
+              "dt" => 946_764_000,
+              "weather" => [
+                %{
+                  "id" => 501,
+                  "main" => "Rain",
+                  "description" => "moderate rain"
+                }
+              ]
+            }
+          ]
+        }
+
+        {:ok, response}
+      end)
 
       conn = Controller.show(conn, to_params(london))
 
@@ -23,6 +72,40 @@ defmodule MyUmbrellaWeb.ControllerTest do
       orlando = Coordinates.new(28.5383, -81.3792)
       current_date_time_utc = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "Etc/UTC")
       conn = Plug.Conn.assign(conn, :current_date_time_utc, current_date_time_utc)
+
+      stub(MyUmbrella.WeatherApi.Mock, :get_forecast, fn coordinates, :today ->
+        {lat, lon} = coordinates
+
+        response = %{
+          "lat" => lat,
+          "lon" => lon,
+          "timezone" => "America/New_York",
+          "current" => %{
+            "dt" => 946_762_200,
+            "weather" => [
+              %{
+                "id" => 803,
+                "main" => "Clouds",
+                "description" => "broken clouds"
+              }
+            ]
+          },
+          "hourly" => [
+            %{
+              "dt" => 946_764_000,
+              "weather" => [
+                %{
+                  "id" => 803,
+                  "main" => "Clouds",
+                  "description" => "broken clouds"
+                }
+              ]
+            }
+          ]
+        }
+
+        {:ok, response}
+      end)
 
       conn = Controller.show(conn, to_params(orlando))
 
