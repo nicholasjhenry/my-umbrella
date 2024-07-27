@@ -10,7 +10,6 @@ defmodule MyUmbrellaTest do
       london = Coordinates.new(51.5098, -0.118)
 
       weather_result = MyUmbrella.for_today(london, WeatherApi)
-      # announcement = MyUmbrella.determine_announcement(weather)
 
       expected_weather =
         Weather.new(date_time: ~U[2000-01-01 22:00:00Z], condition: :rain, code: 501)
@@ -23,7 +22,6 @@ defmodule MyUmbrellaTest do
       orlando = Coordinates.new(28.5383, -81.3792)
 
       weather_result = MyUmbrella.for_today(orlando, WeatherApi)
-      # announcement = MyUmbrella.determine_announcement(weather)
 
       assert {:ok, :no_precipitation} == weather_result
     end
