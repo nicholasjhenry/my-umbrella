@@ -17,7 +17,7 @@ defmodule MyUmbrella do
     @type t :: String.t()
   end
 
-  @spec for_today(Coordinates.t(), module()) :: {:ok, Announcement.t()} | {:error, term}
+  @spec for_today(Coordinates.t(), module()) :: {:ok, Weather.t()} | {:error, term}
   def for_today(coordinates, weather_api) do
     current_date_time = ~U[2000-01-01 21:30:00Z]
 
@@ -25,9 +25,9 @@ defmodule MyUmbrella do
          {:ok, weather_report} <- WeatherApi.Response.to_weather_report(response),
          weather_report_for_today <-
            WeatherReport.filter_by_same_day(weather_report, current_date_time),
-         %Weather{} = _weather <-
+         %Weather{} = weather <-
            Precipitation.determine_most_intense_precipitation_condition(weather_report_for_today) do
-      {:ok, "Nah, all good"}
+      {:ok, weather}
     end
   end
 end

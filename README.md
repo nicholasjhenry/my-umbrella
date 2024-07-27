@@ -14,8 +14,9 @@ _Nullables_ from the pattern language _Testing Without Mocks_.
 
 ```elixir
 orlando = MyUmbrella.Coordinates.new(28.5383, -81.3792)
-MyUmbrella.for_today(orlando)
-#=> {:ok, "Thunderstorms! Take two umbrellas!"}
+{:ok, weather} = MyUmbrella.for_today(orlando)
+MyUmbrella.announce(weather)
+#=> {:ok, MyUmbrella.Announcement{value: "Thunderstorms! Take two umbrellas!"}}
 ```
 
 ## Sequence Diagram
@@ -26,10 +27,12 @@ sequenceDiagram
     MyUmbrella->>WeatherApi: get_forecast(Coordinates.t(), :today)
     WeatherApi-->>MyUmbrella: {:ok, list(WeatherReport.t())}
     MyUmbrella->>WeatherReport: filter_by_same_day(list(WeatherReport.t()), DateTime.t())
-    Weather-->>MyUmbrella: list(WeatherReport.t())
-    MyUmbrella->>WeatherReport: determine_most_intense_precipitation_condition(list(WeatherReport.t()), :today)
-    WeatherReport-->>MyUmbrella: WeatherReport.t()
-    MyUmbrella->>Announcement: from_weather_report(WeatherReport.t())
-    Announcement-->>MyUmbrella: Annoucement.t() :: String.t()
-    MyUmbrella-->>Controller: {:ok, Annoucement.t() :: String.t()}
+    WeatherReport-->>MyUmbrella: list(WeatherReport.t())
+    MyUmbrella->>Precipitation: determine_most_intense_precipitation_condition(list(WeatherReport.t()), :today)
+    Precipitation-->>MyUmbrella: Weather.t()
+    MyUmbrella-->>Controller: {:ok, Weather.t()}
+    Controller->>MyUmbrella: announce(Weather.t())
+    MyUmbrella->>Announcement: from_weather_report(Weather.t())
+    Announcement-->>MyUmbrella: Annoucement.t()
+    MyUmbrella-->>Controller: Annoucement.t()
 ```
