@@ -28,12 +28,16 @@ defmodule MyUmbrella.MixProject do
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:mix_test_watch, "~> 1.1", only: [:dev, :test], runtime: false},
+      {:plug_cowboy, "~> 2.7"},
       {:tz, "~> 0.3.0"}
     ]
   end
 
   defp aliases do
-    [check: ["credo --strict", "dialyzer"]]
+    [
+      check: ["credo --strict", "dialyzer"],
+      server: ["run --eval MyUmbrellaWeb.Server.start"]
+    ]
   end
 
   defp dialyzer do

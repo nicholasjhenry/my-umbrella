@@ -9,4 +9,9 @@ defmodule MyUmbrella.Coordinates do
   def new(latitude, longitude) do
     {latitude, longitude}
   end
+
+  @spec parse(String.t(), String.t()) :: t
+  def parse(latitude, longitude) do
+    new(String.to_float(latitude), String.to_float(longitude))
+  end
 end
