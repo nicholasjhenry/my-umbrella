@@ -29,7 +29,10 @@ defmodule MyUmbrella.MixProject do
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:mix_test_watch, "~> 1.1", only: [:dev, :test], runtime: false},
       {:mox, "~> 1.0", only: :test},
+      {:bypass, "~> 2.1", only: :test},
       {:plug_cowboy, "~> 2.7"},
+      {:httpoison, "~> 2.2"},
+      {:jason, "~> 1.4"},
       {:tz, "~> 0.3.0"}
     ]
   end

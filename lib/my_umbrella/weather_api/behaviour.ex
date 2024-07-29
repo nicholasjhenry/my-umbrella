@@ -5,5 +5,6 @@ defmodule MyUmbrella.WeatherApi.Behaviour do
 
   @type coordinates :: {float(), float()}
 
-  @callback get_forecast(coordinates, duration :: :today) :: {:ok, Response.t()} | {:error, term}
+  @callback get_forecast(coordinates, duration :: :today, url :: URI.t() | nil) ::
+              {:ok, Response.t()} | {:error, term}
 end

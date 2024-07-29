@@ -7,7 +7,7 @@ defmodule MyUmbrella.WeatherApi.Fake do
   @london {51.5098, -0.118}
 
   @impl true
-  def get_forecast(@london, :today) do
+  def get_forecast(@london, :today, _url) do
     project_path = Mix.Project.project_file() |> Path.dirname()
     fixture_path = Path.join([project_path, "test/fixtures"])
     fixture_pathname = Path.join([fixture_path, "response/success_london.json"])
@@ -16,7 +16,7 @@ defmodule MyUmbrella.WeatherApi.Fake do
     {:ok, response}
   end
 
-  def get_forecast(@orlando, :today) do
+  def get_forecast(@orlando, :today, _url) do
     project_path = Mix.Project.project_file() |> Path.dirname()
     fixture_path = Path.join([project_path, "test/fixtures"])
     fixture_pathname = Path.join([fixture_path, "response/success_orlando.json"])

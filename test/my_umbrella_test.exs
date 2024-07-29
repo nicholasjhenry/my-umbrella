@@ -13,7 +13,9 @@ defmodule MyUmbrellaTest do
       london = Coordinates.new(51.5098, -0.118)
       current_date_time_utc = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "Etc/UTC")
 
-      expect(MyUmbrella.WeatherApi.Mock, :get_forecast, fn coordinates, :today ->
+      expect(MyUmbrella.WeatherApi.Mock, :get_forecast, fn coordinates,
+                                                           :today,
+                                                           _test_server_url ->
         assert london == coordinates
         {lat, lon} = coordinates
 
@@ -64,7 +66,9 @@ defmodule MyUmbrellaTest do
         DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "America/New_York")
         |> DateTime.shift_zone!("Etc/UTC")
 
-      expect(MyUmbrella.WeatherApi.Mock, :get_forecast, fn coordinates, :today ->
+      expect(MyUmbrella.WeatherApi.Mock, :get_forecast, fn coordinates,
+                                                           :today,
+                                                           _test_server_url ->
         assert orlando == coordinates
         {lat, lon} = coordinates
 
