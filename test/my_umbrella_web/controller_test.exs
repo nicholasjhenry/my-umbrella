@@ -106,7 +106,7 @@ defmodule MyUmbrellaWeb.ControllerTest do
       conn = Plug.Conn.assign(conn, :current_date_time_utc, current_date_time_utc)
 
       stub(MyUmbrella.WeatherApi.Mock, :get_forecast, fn _coordinates, :today, _test_server_url ->
-        unauthorized = 401
+        unauthorized = {:status, 401}
 
         {:error, unauthorized}
       end)

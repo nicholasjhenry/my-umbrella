@@ -118,14 +118,14 @@ defmodule MyUmbrellaTest do
       expect(MyUmbrella.WeatherApi.Mock, :get_forecast, fn _coordinates,
                                                            :today,
                                                            _test_server_url ->
-        not_authorized = 401
+        not_authorized = {:status, 401}
 
         {:error, not_authorized}
       end)
 
       weather_result = MyUmbrella.for_today(orlando, current_date_time_utc)
 
-      assert {:error, 401} == weather_result
+      assert {:error, {:status, 401}} == weather_result
     end
   end
 end
