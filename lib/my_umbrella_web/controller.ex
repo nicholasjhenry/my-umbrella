@@ -13,6 +13,7 @@ defmodule MyUmbrellaWeb.Controller do
       case MyUmbrella.for_today(coordinates, current_date_time_utc) do
         {:ok, :no_precipitation} -> {200, "No, not today!"}
         {:ok, {:precipitation, _weather}} -> {200, "Yes, definitey!"}
+        {:error, status_code} -> {status_code, "An error has occured."}
       end
 
     conn

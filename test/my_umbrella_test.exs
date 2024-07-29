@@ -107,5 +107,25 @@ defmodule MyUmbrellaTest do
 
       assert {:ok, :no_precipitation} == weather_result
     end
+
+    test "given an HTTP response with an error; then the error is returned" do
+      orlando = Coordinates.new(28.5383, -81.3792)
+
+      current_date_time_utc =
+        DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "America/New_York")
+        |> DateTime.shift_zone!("Etc/UTC")
+
+      expect(MyUmbrella.WeatherApi.Mock, :get_forecast, fn _coordinates,
+                                                           :today,
+                                                           _test_server_url ->
+        not_authorized = 401
+
+        {:error, not_authorized}
+      end)
+
+      weather_result = MyUmbrella.for_today(orlando, current_date_time_utc)
+
+      assert {:error, 401} == weather_result
+    end
   end
 end
