@@ -1,5 +1,5 @@
 defmodule MyUmbrella.PrecipitationTest do
-  use ExUnit.Case
+  use MyUmbrella.TestCase, async: true
 
   alias MyUmbrella.Coordinates
   alias MyUmbrella.Precipitation

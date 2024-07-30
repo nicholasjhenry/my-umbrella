@@ -1,5 +1,5 @@
 defmodule MyUmbrella.WeatherApi.ResponseTest do
-  use MyUmbrella.TestCase
+  use MyUmbrella.TestCase, async: true
 
   alias MyUmbrella.Coordinates
   alias MyUmbrella.Weather
