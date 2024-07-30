@@ -36,3 +36,42 @@ sequenceDiagram
     Announcement-->>MyUmbrella: Annoucement.t()
     MyUmbrella-->>Controller: Annoucement.t()
 ```
+
+## Development
+
+Prerequites:
+
+- `asdf`: https://asdf-vm.com/
+- `httpie`: https://httpie.io/cli
+- Open Weather Map Application ID: https://openweathermap.org/
+
+Setup:
+
+```sh
+git clone https://github.com/nicholasjhenry/my_umbrella.git
+cd ./my_umbrella
+asdf install
+```
+
+Testing:
+
+```sh
+mix test
+```
+
+Lint and type checks:
+
+```sh
+mix check
+```
+
+Run:
+
+```sh
+# terminal window: 1
+export OPEN_WEATHER_MAP_APP_ID=YOUR_APP_ID
+mix server
+
+# terminal window: 2
+script/request
+```
