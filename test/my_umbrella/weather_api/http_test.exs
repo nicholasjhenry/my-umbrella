@@ -18,7 +18,7 @@ defmodule MyUmbrella.WeatherApi.HttpTest do
     } do
       test_server_url = URI.parse("http://localhost:#{bypass.port}")
 
-      fixture_pathname = Path.join([fixture_path, "response/success.json"])
+      fixture_pathname = Path.join([fixture_path, "weather_api/response/success_london.json"])
       response = fixture_pathname |> File.read!() |> :json.decode()
 
       Bypass.expect_once(bypass, "GET", "/data/3.0/onecall", fn conn ->
@@ -47,7 +47,7 @@ defmodule MyUmbrella.WeatherApi.HttpTest do
     } do
       test_server_url = URI.parse("http://localhost:#{bypass.port}")
 
-      fixture_pathname = Path.join([fixture_path, "response/unauthorized.json"])
+      fixture_pathname = Path.join([fixture_path, "weather_api/response/unauthorized.json"])
       response = fixture_pathname |> File.read!() |> :json.decode()
 
       Bypass.expect_once(bypass, "GET", "/data/3.0/onecall", fn conn ->
