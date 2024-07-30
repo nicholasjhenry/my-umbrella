@@ -70,4 +70,8 @@ defmodule MyUmbrella.Fixtures.WeatherApi do
 
     {:error, not_authorized}
   end
+
+  def response_fixture(:critical_error, _coordinates, _time_zone) do
+    {:error, :nxdomain}
+  end
 end

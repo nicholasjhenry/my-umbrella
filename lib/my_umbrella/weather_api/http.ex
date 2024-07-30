@@ -27,7 +27,8 @@ defmodule MyUmbrella.WeatherApi.Http do
       {:ok, %HTTPoison.Response{status_code: status_code}} ->
         {:error, {:status, status_code}}
 
-        # NOTE: How to test the return type `{:error, HTTPoison.Error.t()}`
+      {:error, error} ->
+        {:error, error.reason}
     end
   end
 

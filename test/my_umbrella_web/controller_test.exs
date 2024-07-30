@@ -39,6 +39,16 @@ defmodule MyUmbrellaWeb.ControllerTest do
 
       assert {401, _headers, _body} = Plug.Test.sent_resp(conn)
     end
+
+    test "given an error; then responds with an error", %{conn: conn} do
+      london = coordinates_fixture(:london)
+      current_date_time = date_time_fixture(:london)
+
+      conn = determine_if_umbrella_needed_today(conn, :critical_error, london, current_date_time)
+
+      assert {500, _headers, body} = Plug.Test.sent_resp(conn)
+      assert body =~ "nxdomain"
+    end
   end
 
   defp determine_if_umbrella_needed_today(

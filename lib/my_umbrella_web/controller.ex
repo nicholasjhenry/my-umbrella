@@ -14,6 +14,7 @@ defmodule MyUmbrellaWeb.Controller do
         {:ok, :no_precipitation} -> {200, "No, not today!"}
         {:ok, {:precipitation, _weather}} -> {200, "Yes, definitey!"}
         {:error, {:status, status_code}} -> {status_code, "An error has occured."}
+        {:error, reason} -> {500, "A server error has occured: #{reason}"}
       end
 
     conn

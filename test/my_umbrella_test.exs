@@ -44,6 +44,16 @@ defmodule MyUmbrellaTest do
       assert {:error, {:status, 401}} == weather_result
     end
 
+    test "given an error; then the error is returned" do
+      london = coordinates_fixture(:london)
+      current_date_time = date_time_fixture(:london)
+
+      weather_result =
+        determine_if_umbrella_needed_today(:critical_error, london, current_date_time)
+
+      assert {:error, :nxdomain} == weather_result
+    end
+
     defp determine_if_umbrella_needed_today(
            maybe_precipitation,
            coordinates,

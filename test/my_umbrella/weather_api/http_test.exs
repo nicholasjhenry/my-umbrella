@@ -64,5 +64,14 @@ defmodule MyUmbrella.WeatherApi.HttpTest do
 
       assert {:error, {:status, 401}} == result
     end
+
+    test "handles a response with an error" do
+      test_server_url = URI.parse("http://does-not-exist.localhost")
+
+      london = coordinates_fixture(:london)
+      result = WeatherApi.get_forecast(london, :today, test_server_url)
+
+      assert {:error, :nxdomain} == result
+    end
   end
 end
