@@ -10,4 +10,12 @@ defmodule MyUmbrella.Fixtures do
   def coordinates_fixture(:orlando) do
     Coordinates.new(28.5383, -81.3792)
   end
+
+  def date_time_fixture(:london) do
+    DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "Etc/UTC")
+  end
+
+  def date_time_fixture(:orlando) do
+    DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "America/New_York")
+  end
 end

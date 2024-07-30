@@ -12,7 +12,7 @@ defmodule MyUmbrellaTest do
   describe "determine if an umbrella is needed today" do
     test "given it IS raining before end-of-day; then an umbrella IS needed" do
       london = coordinates_fixture(:london)
-      current_date_time = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "Etc/UTC")
+      current_date_time = date_time_fixture(:london)
 
       weather_result =
         determine_if_umbrella_needed_today(:precipitation, london, current_date_time)
@@ -26,7 +26,7 @@ defmodule MyUmbrellaTest do
 
     test "given it IS NOT raining before end-of-day; then an umbrella IS NOT needed" do
       orlando = coordinates_fixture(:orlando)
-      current_date_time = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "America/New_York")
+      current_date_time = date_time_fixture(:orlando)
 
       weather_result =
         determine_if_umbrella_needed_today(:no_precipitation, orlando, current_date_time)
@@ -36,10 +36,10 @@ defmodule MyUmbrellaTest do
 
     test "given an HTTP response with an error; then the error is returned" do
       london = coordinates_fixture(:london)
-      current_date_time_utc = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "Etc/UTC")
+      current_date_time = date_time_fixture(:london)
 
       weather_result =
-        determine_if_umbrella_needed_today(:error, london, current_date_time_utc)
+        determine_if_umbrella_needed_today(:error, london, current_date_time)
 
       assert {:error, {:status, 401}} == weather_result
     end
