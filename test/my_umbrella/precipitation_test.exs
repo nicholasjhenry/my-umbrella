@@ -1,10 +1,11 @@
 defmodule MyUmbrella.PrecipitationTest do
   use MyUmbrella.TestCase, async: true
 
-  alias MyUmbrella.Coordinates
   alias MyUmbrella.Precipitation
   alias MyUmbrella.Weather
   alias MyUmbrella.WeatherReport
+
+  import MyUmbrella.Fixtures
 
   test "comparing two weather forecasts with a percipitation condition" do
     utc_2130 = ~U[2000-01-01 21:30:00Z]
@@ -30,7 +31,7 @@ defmodule MyUmbrella.PrecipitationTest do
     @tag :wip
 
     test "given an empty list; then returns nothing" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       weather_report = WeatherReport.new(coordinates: london, time_zone: "Etc/UTC")
 
       result = Precipitation.determine_most_intense_precipitation_condition(weather_report)
@@ -38,7 +39,7 @@ defmodule MyUmbrella.PrecipitationTest do
     end
 
     test "given a single weather report with precipitation; then returns that weather report" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       utc_2130 = ~U[2000-01-01 21:30:00Z]
 
       weather_report =
@@ -62,7 +63,7 @@ defmodule MyUmbrella.PrecipitationTest do
     end
 
     test "given a single weather report with no precipitation; then returns nothing" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       utc_2130 = ~U[2000-01-01 21:30:00Z]
 
       weather_report =
@@ -79,7 +80,7 @@ defmodule MyUmbrella.PrecipitationTest do
     end
 
     test "given multiple weather reports with precipitation; then returns the most intense weather report" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       utc_2130 = ~U[2000-01-01 21:30:00Z]
 
       weather_report =

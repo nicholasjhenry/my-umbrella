@@ -1,17 +1,17 @@
 defmodule MyUmbrellaTest do
   use MyUmbrella.TestCase, async: true
 
-  alias MyUmbrella.Coordinates
   alias MyUmbrella.Weather
 
   import Mox
+  import MyUmbrella.Fixtures
   import MyUmbrella.Fixtures.WeatherApi
 
   setup :verify_on_exit!
 
   describe "determine if an umbrella is needed today" do
     test "given it IS raining before end-of-day; then an umbrella IS needed" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       time_zone_utc = "Etc/UTC"
       current_date_time_utc = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], time_zone_utc)
 
@@ -32,7 +32,7 @@ defmodule MyUmbrellaTest do
     end
 
     test "given it IS NOT raining before end-of-day; then an umbrella IS NOT needed" do
-      orlando = Coordinates.new(28.5383, -81.3792)
+      orlando = coordinates_fixture(:orlando)
       time_zone_new_york = "America/New_York"
 
       current_date_time_utc =
@@ -52,7 +52,7 @@ defmodule MyUmbrellaTest do
     end
 
     test "given an HTTP response with an error; then the error is returned" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       time_zone_utc = "Etc/UTC"
       current_date_time_utc = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], time_zone_utc)
 

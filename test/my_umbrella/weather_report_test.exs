@@ -1,13 +1,14 @@
 defmodule MyUmbrella.WeatherReportTest do
   use MyUmbrella.TestCase, async: true
 
-  alias MyUmbrella.Coordinates
   alias MyUmbrella.Weather
   alias MyUmbrella.WeatherReport
 
+  import MyUmbrella.Fixtures
+
   describe "filter weather report for the same day" do
     test "given an empty list; then returns an empty list" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       weather_report = WeatherReport.new(coordinates: london, time_zone: "Etc/UTC")
 
       current_date_time = ~U[2000-01-01 21:00:00Z]
@@ -19,7 +20,7 @@ defmodule MyUmbrella.WeatherReportTest do
     end
 
     test "given a single weather forecast reported before midnight; then includes that weather forecast" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       utc_2130 = ~U[2000-01-01 21:30:00Z]
 
       weather_report =
@@ -37,7 +38,7 @@ defmodule MyUmbrella.WeatherReportTest do
     end
 
     test "given a single weather report after midnight; then excludes that report" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       utc_0030 = ~U[2000-01-02 00:30:00Z]
 
       weather_report =
@@ -53,7 +54,7 @@ defmodule MyUmbrella.WeatherReportTest do
     end
 
     test "given a weather report from another time zone before midnight; then includes that weather forecast" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       est_2130 = DateTime.new!(~D[2000-01-01], ~T[21:30:00.00], "America/New_York")
 
       weather_report =
@@ -71,7 +72,7 @@ defmodule MyUmbrella.WeatherReportTest do
     end
 
     test "given a weather report from another timezone after midnight; then excludes that weather forecast" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       est_0030 = DateTime.new!(~D[2000-01-02], ~T[00:30:00.00], "America/New_York")
 
       weather_report =
@@ -87,7 +88,7 @@ defmodule MyUmbrella.WeatherReportTest do
     end
 
     test "given a mismatch of timezones; then raises an error" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       est_0030 = DateTime.new!(~D[2000-01-02], ~T[00:30:00.00], "America/New_York")
 
       weather_report =

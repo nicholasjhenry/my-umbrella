@@ -1,8 +1,9 @@
 defmodule MyUmbrella.WeatherApi.HttpTest do
   use MyUmbrella.TestCase, async: false
 
-  alias MyUmbrella.Coordinates
   alias MyUmbrella.WeatherApi
+
+  import MyUmbrella.Fixtures
 
   setup do
     Mox.stub_with(MyUmbrella.WeatherApi.Mock, MyUmbrella.WeatherApi.Http)
@@ -34,7 +35,7 @@ defmodule MyUmbrella.WeatherApi.HttpTest do
         |> Plug.Conn.resp(200, Jason.encode!(response))
       end)
 
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       result = WeatherApi.get_forecast(london, :today, test_server_url)
 
       assert {:ok, data} = result
@@ -58,7 +59,7 @@ defmodule MyUmbrella.WeatherApi.HttpTest do
         |> Plug.Conn.resp(401, Jason.encode!(response))
       end)
 
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       result = WeatherApi.get_forecast(london, :today, test_server_url)
 
       assert {:error, {:status, 401}} == result

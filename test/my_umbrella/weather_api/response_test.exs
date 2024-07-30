@@ -1,9 +1,10 @@
 defmodule MyUmbrella.WeatherApi.ResponseTest do
   use MyUmbrella.TestCase, async: true
 
-  alias MyUmbrella.Coordinates
   alias MyUmbrella.Weather
   alias MyUmbrella.WeatherApi.Response
+
+  import MyUmbrella.Fixtures
 
   describe "converting a response" do
     test "given an API response; returns a weather report for current and forecasted conditions",
@@ -15,7 +16,7 @@ defmodule MyUmbrella.WeatherApi.ResponseTest do
 
       assert {:ok, weather_report} = result
 
-      london = Coordinates.new(51.5098, -0.118)
+      london = coordinates_fixture(:london)
       assert weather_report.coordinates == london
       assert weather_report.time_zone == "Etc/UTC"
 
