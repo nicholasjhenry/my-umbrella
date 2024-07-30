@@ -47,14 +47,15 @@ defmodule MyUmbrellaWeb.ControllerTest do
          coordinates,
          current_date_time
        ) do
-    current_date_time_utc = DateTime.shift_zone!(current_date_time, "Etc/UTC")
-    conn = Plug.Conn.assign(conn, :current_date_time_utc, current_date_time_utc)
-
     stub(MyUmbrella.WeatherApi.Mock, :get_forecast, fn _coordinates, :today, _test_server_url ->
       response_fixture(maybe_precipitation, coordinates, current_date_time.time_zone)
     end)
 
-    Controller.show(conn, to_params(coordinates))
+    current_date_time_utc = DateTime.shift_zone!(current_date_time, "Etc/UTC")
+
+    conn
+    |> Plug.Conn.assign(:current_date_time_utc, current_date_time_utc)
+    |> Controller.show(to_params(coordinates))
   end
 
   defp to_params({lat, lon}) do
