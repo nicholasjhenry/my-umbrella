@@ -10,7 +10,7 @@ defmodule MyUmbrellaWeb.ControllerTest do
   describe "determining if an umbrella is required today" do
     test "given it IS raining before end-of-day; then an umbrella IS needed", %{conn: conn} do
       london = coordinates_fixture(:london)
-      current_date_time = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "Etc/UTC")
+      current_date_time = date_time_fixture(:london)
 
       conn = determine_if_umbrella_needed_today(conn, :precipitation, london, current_date_time)
 
@@ -22,7 +22,7 @@ defmodule MyUmbrellaWeb.ControllerTest do
       conn: conn
     } do
       orlando = coordinates_fixture(:orlando)
-      current_date_time = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "America/New_York")
+      current_date_time = date_time_fixture(:orlando)
 
       conn =
         determine_if_umbrella_needed_today(conn, :no_precipitation, orlando, current_date_time)
@@ -33,7 +33,7 @@ defmodule MyUmbrellaWeb.ControllerTest do
 
     test "given an HTTP error; then responds with an error", %{conn: conn} do
       london = coordinates_fixture(:london)
-      current_date_time = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "Etc/UTC")
+      current_date_time = date_time_fixture(:london)
 
       conn = determine_if_umbrella_needed_today(conn, :error, london, current_date_time)
 
