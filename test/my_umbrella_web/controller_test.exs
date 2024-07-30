@@ -10,15 +10,9 @@ defmodule MyUmbrellaWeb.ControllerTest do
   describe "determining if an umbrella is required today" do
     test "given it IS raining before end-of-day; then an umbrella IS needed", %{conn: conn} do
       london = coordinates_fixture(:london)
-      time_zone_utc = "Etc/UTC"
-      current_date_time_utc = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], time_zone_utc)
-      conn = Plug.Conn.assign(conn, :current_date_time_utc, current_date_time_utc)
+      current_date_time = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "Etc/UTC")
 
-      stub(MyUmbrella.WeatherApi.Mock, :get_forecast, fn _coordinates, :today, _test_server_url ->
-        response_fixture(:precipitation, london, time_zone_utc)
-      end)
-
-      conn = Controller.show(conn, to_params(london))
+      conn = determine_if_umbrella_needed_today(conn, :precipitation, london, current_date_time)
 
       assert {200, _headers, body} = Plug.Test.sent_resp(conn)
       assert body =~ "Yes"
@@ -28,19 +22,10 @@ defmodule MyUmbrellaWeb.ControllerTest do
       conn: conn
     } do
       orlando = coordinates_fixture(:orlando)
-      time_zone_new_york = "America/New_York"
+      current_date_time = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "America/New_York")
 
-      current_date_time_utc =
-        DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], time_zone_new_york)
-        |> DateTime.shift_zone!("Etc/UTC")
-
-      conn = Plug.Conn.assign(conn, :current_date_time_utc, current_date_time_utc)
-
-      stub(MyUmbrella.WeatherApi.Mock, :get_forecast, fn _coordinates, :today, _test_server_url ->
-        response_fixture(:no_precipitation, orlando, time_zone_new_york)
-      end)
-
-      conn = Controller.show(conn, to_params(orlando))
+      conn =
+        determine_if_umbrella_needed_today(conn, :no_precipitation, orlando, current_date_time)
 
       assert {200, _headers, body} = Plug.Test.sent_resp(conn)
       assert body =~ "No"
@@ -48,18 +33,28 @@ defmodule MyUmbrellaWeb.ControllerTest do
 
     test "given an HTTP error; then responds with an error", %{conn: conn} do
       london = coordinates_fixture(:london)
-      time_zone_utc = "Etc/UTC"
-      current_date_time_utc = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], time_zone_utc)
-      conn = Plug.Conn.assign(conn, :current_date_time_utc, current_date_time_utc)
+      current_date_time = DateTime.new!(~D[2000-01-01], ~T[21:30:00Z], "Etc/UTC")
 
-      stub(MyUmbrella.WeatherApi.Mock, :get_forecast, fn _coordinates, :today, _test_server_url ->
-        response_fixture(:error, london, time_zone_utc)
-      end)
-
-      conn = Controller.show(conn, to_params(london))
+      conn = determine_if_umbrella_needed_today(conn, :error, london, current_date_time)
 
       assert {401, _headers, _body} = Plug.Test.sent_resp(conn)
     end
+  end
+
+  defp determine_if_umbrella_needed_today(
+         conn,
+         maybe_precipitation,
+         coordinates,
+         current_date_time
+       ) do
+    current_date_time_utc = DateTime.shift_zone!(current_date_time, "Etc/UTC")
+    conn = Plug.Conn.assign(conn, :current_date_time_utc, current_date_time_utc)
+
+    stub(MyUmbrella.WeatherApi.Mock, :get_forecast, fn _coordinates, :today, _test_server_url ->
+      response_fixture(maybe_precipitation, coordinates, current_date_time.time_zone)
+    end)
+
+    Controller.show(conn, to_params(coordinates))
   end
 
   defp to_params({lat, lon}) do
