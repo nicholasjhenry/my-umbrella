@@ -2,6 +2,7 @@ defmodule MyUmbrella.Controls.Weather do
   @moduledoc false
 
   alias MyUmbrella.Weather
+
   alias MyUmbrella.Controls.Calendar.CurrentDateTime.LocalTime
 
   def attributes(date_time \\ nil) do
