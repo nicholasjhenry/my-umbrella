@@ -11,17 +11,19 @@ defmodule MyUmbrella.PrecipitationTest do
   test "comparing two weather forecasts with a percipitation condition" do
     current_date_time = CurrentDateTimeControl.Utc.example(:london)
 
-    snow = %Weather{
-      date_time: current_date_time,
-      code: 600,
-      condition: :snow
-    }
+    snow =
+      Weather.new(
+        date_time: current_date_time,
+        code: 600,
+        condition: :snow
+      )
 
-    thunderstorm = %Weather{
-      date_time: current_date_time,
-      code: 200,
-      condition: :thunderstorm
-    }
+    thunderstorm =
+      Weather.new(
+        date_time: current_date_time,
+        code: 200,
+        condition: :thunderstorm
+      )
 
     assert Precipitation.compare(snow, snow) == :eq
     assert Precipitation.compare(snow, thunderstorm) == :gt
@@ -55,11 +57,12 @@ defmodule MyUmbrella.PrecipitationTest do
 
       result = Precipitation.determine_most_intense_precipitation_condition(weather_report)
 
-      expected_weather = %Weather{
-        date_time: current_date_time,
-        code: 500,
-        condition: :rain
-      }
+      expected_weather =
+        Weather.new(
+          date_time: current_date_time,
+          code: 500,
+          condition: :rain
+        )
 
       assert {:precipitation, actual_weather} = result
       assert Weather.eq?(actual_weather, expected_weather)
