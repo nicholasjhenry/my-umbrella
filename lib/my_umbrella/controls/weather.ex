@@ -4,6 +4,18 @@ defmodule MyUmbrella.Controls.Weather do
   alias MyUmbrella.Weather
   alias MyUmbrella.Controls.Calendar.CurrentDateTime.LocalTime
 
+  def attributes(date_time \\ nil) do
+    %{
+      date_time: date_time || LocalTime.example(:london),
+      code: 800,
+      condition: :clear
+    }
+  end
+
+  def example(date_time \\ nil) do
+    Weather.new(attributes(date_time))
+  end
+
   defmodule Cloud do
     @moduledoc false
 

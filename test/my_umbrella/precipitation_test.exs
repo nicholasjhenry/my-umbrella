@@ -6,8 +6,8 @@ defmodule MyUmbrella.PrecipitationTest do
   alias MyUmbrella.WeatherReport
 
   alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControl
-  alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
   alias MyUmbrella.Controls.Weather, as: WeatherControl
+  alias MyUmbrella.Controls.WeatherReport, as: WeatherReportControl
 
   test "comparing two weather forecasts with a percipitation condition" do
     snow = WeatherControl.Snow.example()
@@ -20,11 +20,7 @@ defmodule MyUmbrella.PrecipitationTest do
 
   describe "determining the most intense precipitation condition" do
     test "given an empty list; then returns nothing" do
-      london = CoordinatesControl.example(:london)
-      current_date_time = CurrentDateTimeControl.Utc.example(:london)
-
-      weather_report =
-        WeatherReport.new(coordinates: london, time_zone: current_date_time.time_zone)
+      weather_report = WeatherReportControl.example()
 
       result = Precipitation.determine_most_intense_precipitation_condition(weather_report)
 
@@ -32,11 +28,8 @@ defmodule MyUmbrella.PrecipitationTest do
     end
 
     test "given a single weather report with precipitation; then returns that weather report" do
-      london = CoordinatesControl.example(:london)
-      current_date_time = CurrentDateTimeControl.Utc.example(:london)
-
       weather_report =
-        WeatherReport.new(coordinates: london, time_zone: current_date_time.time_zone)
+        WeatherReportControl.example()
         |> WeatherReport.add_weather(WeatherControl.Rain.attributes())
 
       result = Precipitation.determine_most_intense_precipitation_condition(weather_report)
@@ -46,11 +39,8 @@ defmodule MyUmbrella.PrecipitationTest do
     end
 
     test "given a single weather report with no precipitation; then returns nothing" do
-      london = CoordinatesControl.example(:london)
-      current_date_time = CurrentDateTimeControl.Utc.example(:london)
-
       weather_report =
-        WeatherReport.new(coordinates: london, time_zone: current_date_time.time_zone)
+        WeatherReportControl.example()
         |> WeatherReport.add_weather(WeatherControl.Clear.attributes())
 
       result = Precipitation.determine_most_intense_precipitation_condition(weather_report)
@@ -59,11 +49,11 @@ defmodule MyUmbrella.PrecipitationTest do
     end
 
     test "given multiple weather reports with precipitation; then returns the most intense weather report" do
-      london = CoordinatesControl.example(:london)
       current_date_time = CurrentDateTimeControl.Utc.example(:london)
+      weather_report = WeatherReportControl.example()
 
       weather_report =
-        WeatherReport.new(coordinates: london, time_zone: "Etc/UTC")
+        weather_report
         |> WeatherReport.add_weather(WeatherControl.Drizzle.attributes(current_date_time))
         |> WeatherReport.add_weather(
           WeatherControl.Thunderstorm.attributes(DateTime.shift(current_date_time, hour: 1))
