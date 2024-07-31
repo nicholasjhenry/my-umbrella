@@ -8,25 +8,12 @@ defmodule MyUmbrella.WeatherApi do
 
   alias MyUmbrella.WeatherApi.Response
 
+  alias MyUmbrella.Controls.WeatherApi, as: WeatherApiControl
+
   @type coordinates :: {float(), float()}
 
-  @orlando {28.5383, -81.3792}
-  @london {51.5098, -0.118}
-
   @spec get_forecast(coordinates, duration :: :today) :: {:ok, Response.t()}
-  def get_forecast(@london, :today) do
-    control_path = Application.app_dir(:my_umbrella, "priv/controls")
-    control_pathname = Path.join([control_path, "weather_api/response/success_london.json"])
-    response = control_pathname |> File.read!() |> :json.decode()
-
-    {:ok, response}
-  end
-
-  def get_forecast(@orlando, :today) do
-    control_path = Application.app_dir(:my_umbrella, "priv/controls")
-    control_pathname = Path.join([control_path, "weather_api/response/success_orlando.json"])
-    response = control_pathname |> File.read!() |> :json.decode()
-
-    {:ok, response}
+  def get_forecast(coordinates, :today) do
+    WeatherApiControl.get_forecast(coordinates, :today)
   end
 end
