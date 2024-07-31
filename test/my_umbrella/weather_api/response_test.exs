@@ -7,9 +7,9 @@ defmodule MyUmbrella.WeatherApi.ResponseTest do
 
   describe "converting a response" do
     test "given an API response; returns a weather report for current and forecasted conditions",
-         %{fixture_path: fixture_path} do
-      fixture_pathname = Path.join([fixture_path, "response/success.json"])
-      response = fixture_pathname |> File.read!() |> :json.decode()
+         %{control_path: control_path} do
+      control_pathname = Path.join([control_path, "weather_api/response/success.json"])
+      response = control_pathname |> File.read!() |> :json.decode()
 
       result = Response.to_weather_report(response)
 

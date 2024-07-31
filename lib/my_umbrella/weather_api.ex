@@ -15,19 +15,17 @@ defmodule MyUmbrella.WeatherApi do
 
   @spec get_forecast(coordinates, duration :: :today) :: {:ok, Response.t()}
   def get_forecast(@london, :today) do
-    project_path = Mix.Project.project_file() |> Path.dirname()
-    fixture_path = Path.join([project_path, "test/fixtures"])
-    fixture_pathname = Path.join([fixture_path, "response/success_london.json"])
-    response = fixture_pathname |> File.read!() |> :json.decode()
+    control_path = Application.app_dir(:my_umbrella, "priv/controls")
+    control_pathname = Path.join([control_path, "weather_api/response/success_london.json"])
+    response = control_pathname |> File.read!() |> :json.decode()
 
     {:ok, response}
   end
 
   def get_forecast(@orlando, :today) do
-    project_path = Mix.Project.project_file() |> Path.dirname()
-    fixture_path = Path.join([project_path, "test/fixtures"])
-    fixture_pathname = Path.join([fixture_path, "response/success_orlando.json"])
-    response = fixture_pathname |> File.read!() |> :json.decode()
+    control_path = Application.app_dir(:my_umbrella, "priv/controls")
+    control_pathname = Path.join([control_path, "weather_api/response/success_orlando.json"])
+    response = control_pathname |> File.read!() |> :json.decode()
 
     {:ok, response}
   end

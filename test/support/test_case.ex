@@ -10,9 +10,8 @@ defmodule MyUmbrella.TestCase do
   end
 
   setup _context do
-    project_path = Mix.Project.project_file() |> Path.dirname()
-    fixture_path = Path.join([project_path, "test/fixtures"])
+    control_path = Application.app_dir(:my_umbrella, "priv/controls")
 
-    %{fixture_path: fixture_path}
+    %{control_path: control_path}
   end
 end
