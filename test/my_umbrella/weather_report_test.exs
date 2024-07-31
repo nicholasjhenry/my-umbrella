@@ -5,12 +5,15 @@ defmodule MyUmbrella.WeatherReportTest do
   alias MyUmbrella.Weather
   alias MyUmbrella.WeatherReport
 
+  alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControl
+
   describe "filter weather report for the same day" do
     test "given an empty list; then returns an empty list" do
       london = Coordinates.new(51.5098, -0.118)
-      weather_report = WeatherReport.new(coordinates: london, time_zone: "Etc/UTC")
+      current_date_time = CurrentDateTimeControl.Utc.example(:london)
 
-      current_date_time = ~U[2000-01-01 21:00:00Z]
+      weather_report =
+        WeatherReport.new(coordinates: london, time_zone: current_date_time.time_zone)
 
       filtered_weather_report =
         WeatherReport.filter_by_same_day(weather_report, current_date_time)
@@ -20,13 +23,12 @@ defmodule MyUmbrella.WeatherReportTest do
 
     test "given a single weather forecast reported before midnight; then includes that weather forecast" do
       london = Coordinates.new(51.5098, -0.118)
-      utc_2130 = ~U[2000-01-01 21:30:00Z]
+      current_date_time = CurrentDateTimeControl.Utc.example(:london)
+      before_midnight = CurrentDateTimeControl.before_midnight(current_date_time)
 
       weather_report =
-        WeatherReport.new(coordinates: london, time_zone: "Etc/UTC")
-        |> WeatherReport.add_weather(date_time: utc_2130, code: 500, condition: :rain)
-
-      current_date_time = ~U[2000-01-01 21:00:00Z]
+        WeatherReport.new(coordinates: london, time_zone: current_date_time.time_zone)
+        |> WeatherReport.add_weather(date_time: before_midnight, code: 500, condition: :rain)
 
       filtered_weather_report =
         WeatherReport.filter_by_same_day(weather_report, current_date_time)
@@ -38,13 +40,12 @@ defmodule MyUmbrella.WeatherReportTest do
 
     test "given a single weather report after midnight; then excludes that report" do
       london = Coordinates.new(51.5098, -0.118)
-      utc_0030 = ~U[2000-01-02 00:30:00Z]
+      current_date_time = CurrentDateTimeControl.Utc.example(:london)
+      after_midnight = CurrentDateTimeControl.after_midnight(current_date_time)
 
       weather_report =
-        WeatherReport.new(coordinates: london, time_zone: "Etc/UTC")
-        |> WeatherReport.add_weather(date_time: utc_0030, code: 500, condition: :rain)
-
-      current_date_time = ~U[2000-01-01 21:00:00Z]
+        WeatherReport.new(coordinates: london, time_zone: current_date_time.time_zone)
+        |> WeatherReport.add_weather(date_time: after_midnight, code: 500, condition: :rain)
 
       filtered_weather_report =
         WeatherReport.filter_by_same_day(weather_report, current_date_time)
@@ -53,14 +54,13 @@ defmodule MyUmbrella.WeatherReportTest do
     end
 
     test "given a weather report from another time zone before midnight; then includes that weather forecast" do
-      london = Coordinates.new(51.5098, -0.118)
-      est_2130 = DateTime.new!(~D[2000-01-01], ~T[21:30:00.00], "America/New_York")
+      orlando = Coordinates.new(28.5383, -81.3792)
+      current_date_time = CurrentDateTimeControl.LocalTime.example(:orlando)
+      before_midnight = CurrentDateTimeControl.before_midnight(current_date_time)
 
       weather_report =
-        WeatherReport.new(coordinates: london, time_zone: "America/New_York")
-        |> WeatherReport.add_weather(date_time: est_2130, code: 500, condition: :rain)
-
-      current_date_time = DateTime.new!(~D[2000-01-01], ~T[21:00:00.00], "America/New_York")
+        WeatherReport.new(coordinates: orlando, time_zone: current_date_time.time_zone)
+        |> WeatherReport.add_weather(date_time: before_midnight, code: 500, condition: :rain)
 
       filtered_weather_report =
         WeatherReport.filter_by_same_day(weather_report, current_date_time)
@@ -71,14 +71,13 @@ defmodule MyUmbrella.WeatherReportTest do
     end
 
     test "given a weather report from another timezone after midnight; then excludes that weather forecast" do
-      london = Coordinates.new(51.5098, -0.118)
-      est_0030 = DateTime.new!(~D[2000-01-02], ~T[00:30:00.00], "America/New_York")
+      orlando = Coordinates.new(28.5383, -81.3792)
+      current_date_time = CurrentDateTimeControl.LocalTime.example(:orlando)
+      after_midnight = CurrentDateTimeControl.after_midnight(current_date_time)
 
       weather_report =
-        WeatherReport.new(coordinates: london, time_zone: "America/New_York")
-        |> WeatherReport.add_weather(date_time: est_0030, code: 500, condition: :rain)
-
-      current_date_time = DateTime.new!(~D[2000-01-01], ~T[21:00:00.00], "America/New_York")
+        WeatherReport.new(coordinates: orlando, time_zone: current_date_time.time_zone)
+        |> WeatherReport.add_weather(date_time: after_midnight, code: 500, condition: :rain)
 
       filtered_weather_report =
         WeatherReport.filter_by_same_day(weather_report, current_date_time)
@@ -88,13 +87,12 @@ defmodule MyUmbrella.WeatherReportTest do
 
     test "given a mismatch of timezones; then raises an error" do
       london = Coordinates.new(51.5098, -0.118)
-      est_0030 = DateTime.new!(~D[2000-01-02], ~T[00:30:00.00], "America/New_York")
+      current_date_time = CurrentDateTimeControl.Utc.example(:london)
+      before_midnight = CurrentDateTimeControl.LocalTime.example(:orlando)
 
       weather_report =
         WeatherReport.new(coordinates: london, time_zone: "America/New_York")
-        |> WeatherReport.add_weather(date_time: est_0030, code: 500, condition: :rain)
-
-      current_date_time = DateTime.new!(~D[2000-01-01], ~T[21:00:00.00], "Etc/UTC")
+        |> WeatherReport.add_weather(date_time: before_midnight, code: 500, condition: :rain)
 
       assert_raise RuntimeError, ~r/mismatch with time zones/, fn ->
         WeatherReport.filter_by_same_day(weather_report, current_date_time)
