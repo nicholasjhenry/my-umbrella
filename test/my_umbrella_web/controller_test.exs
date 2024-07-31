@@ -10,9 +10,8 @@ defmodule MyUmbrellaWeb.ControllerTest do
     test "given it IS raining before end-of-day; then an umbrella IS needed", %{conn: conn} do
       london = CoordinatesControl.example(:london)
       current_date_time_utc = CurrentDateTimeControl.Utc.example(:london)
-      conn = Plug.Conn.assign(conn, :current_date_time_utc, current_date_time_utc)
 
-      conn = Controller.show(conn, to_params(london))
+      determine_if_umbrella_need(conn, london, current_date_time_utc)
 
       assert {200, _headers, body} = Plug.Test.sent_resp(conn)
       assert body =~ "Yes"
@@ -23,13 +22,18 @@ defmodule MyUmbrellaWeb.ControllerTest do
     } do
       orlando = CoordinatesControl.example(:orlando)
       current_date_time_utc = CurrentDateTimeControl.Utc.example(:orlando)
-      conn = Plug.Conn.assign(conn, :current_date_time_utc, current_date_time_utc)
 
-      conn = Controller.show(conn, to_params(orlando))
+      determine_if_umbrella_need(conn, orlando, current_date_time_utc)
 
       assert {200, _headers, body} = Plug.Test.sent_resp(conn)
       assert body =~ "No"
     end
+  end
+
+  defp determine_if_umbrella_need(conn, coordinates, date_time) do
+    conn
+    |> Plug.Conn.assign(:current_date_time_utc, date_time)
+    |> Controller.show(to_params(coordinates))
   end
 
   defp to_params({lat, lon}) do
