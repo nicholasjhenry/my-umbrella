@@ -5,6 +5,8 @@ defmodule MyUmbrella.WeatherApi.ResponseTest do
   alias MyUmbrella.Weather
   alias MyUmbrella.WeatherApi.Response
 
+  alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControls
+
   describe "converting a response" do
     test "given an API response; returns a weather report for current and forecasted conditions",
          %{control_path: control_path} do
@@ -16,15 +18,15 @@ defmodule MyUmbrella.WeatherApi.ResponseTest do
       assert {:ok, weather_report} = result
 
       london = Coordinates.new(51.5098, -0.118)
+      current_date_time = CurrentDateTimeControls.Utc.example(:london)
       assert weather_report.coordinates == london
-      assert weather_report.time_zone == "Etc/UTC"
+      assert weather_report.time_zone == current_date_time.time_zone
 
       assert Enum.count(weather_report.weather) == 5
-      utc_2130 = ~U[2000-01-01 21:30:00Z]
 
       expected_current_weather =
         Weather.new(
-          date_time: utc_2130,
+          date_time: current_date_time,
           condition: :clouds,
           code: 802
         )
@@ -35,11 +37,9 @@ defmodule MyUmbrella.WeatherApi.ResponseTest do
 
       actual_forecasted_weather = List.last(weather_report.weather)
 
-      utc_0100 = ~U[2000-01-02 01:00:00Z]
-
       expected_forecasted_weather =
         Weather.new(
-          date_time: utc_0100,
+          date_time: ~U[2000-01-02 01:00:00Z],
           condition: :clouds,
           code: 804
         )

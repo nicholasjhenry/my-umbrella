@@ -6,17 +6,19 @@ defmodule MyUmbrella.PrecipitationTest do
   alias MyUmbrella.Weather
   alias MyUmbrella.WeatherReport
 
+  alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControl
+
   test "comparing two weather forecasts with a percipitation condition" do
-    utc_2130 = ~U[2000-01-01 21:30:00Z]
+    current_date_time = CurrentDateTimeControl.Utc.example(:london)
 
     snow = %Weather{
-      date_time: utc_2130,
+      date_time: current_date_time,
       code: 600,
       condition: :snow
     }
 
     thunderstorm = %Weather{
-      date_time: utc_2130,
+      date_time: current_date_time,
       code: 200,
       condition: :thunderstorm
     }
@@ -31,20 +33,24 @@ defmodule MyUmbrella.PrecipitationTest do
 
     test "given an empty list; then returns nothing" do
       london = Coordinates.new(51.5098, -0.118)
-      weather_report = WeatherReport.new(coordinates: london, time_zone: "Etc/UTC")
+      current_date_time = CurrentDateTimeControl.Utc.example(:london)
+
+      weather_report =
+        WeatherReport.new(coordinates: london, time_zone: current_date_time.time_zone)
 
       result = Precipitation.determine_most_intense_precipitation_condition(weather_report)
+
       assert result == :no_precipitation
     end
 
     test "given a single weather report with precipitation; then returns that weather report" do
       london = Coordinates.new(51.5098, -0.118)
-      utc_2130 = ~U[2000-01-01 21:30:00Z]
+      current_date_time = CurrentDateTimeControl.Utc.example(:london)
 
       weather_report =
-        WeatherReport.new(coordinates: london, time_zone: "Etc/UTC")
+        WeatherReport.new(coordinates: london, time_zone: current_date_time.time_zone)
         |> WeatherReport.add_weather(
-          date_time: utc_2130,
+          date_time: current_date_time,
           code: 500,
           condition: :rain
         )
@@ -52,7 +58,7 @@ defmodule MyUmbrella.PrecipitationTest do
       result = Precipitation.determine_most_intense_precipitation_condition(weather_report)
 
       expected_weather = %Weather{
-        date_time: utc_2130,
+        date_time: current_date_time,
         code: 500,
         condition: :rain
       }
@@ -63,12 +69,12 @@ defmodule MyUmbrella.PrecipitationTest do
 
     test "given a single weather report with no precipitation; then returns nothing" do
       london = Coordinates.new(51.5098, -0.118)
-      utc_2130 = ~U[2000-01-01 21:30:00Z]
+      current_date_time = CurrentDateTimeControl.Utc.example(:london)
 
       weather_report =
-        WeatherReport.new(coordinates: london, time_zone: "Etc/UTC")
+        WeatherReport.new(coordinates: london, time_zone: current_date_time.time_zone)
         |> WeatherReport.add_weather(
-          date_time: utc_2130,
+          date_time: current_date_time,
           code: 800,
           condition: :clear
         )
@@ -80,22 +86,22 @@ defmodule MyUmbrella.PrecipitationTest do
 
     test "given multiple weather reports with precipitation; then returns the most intense weather report" do
       london = Coordinates.new(51.5098, -0.118)
-      utc_2130 = ~U[2000-01-01 21:30:00Z]
+      current_date_time = CurrentDateTimeControl.Utc.example(:london)
 
       weather_report =
         WeatherReport.new(coordinates: london, time_zone: "Etc/UTC")
         |> WeatherReport.add_weather(
-          date_time: utc_2130,
+          date_time: current_date_time,
           condition: :drizzle,
           code: 300
         )
         |> WeatherReport.add_weather(
-          date_time: utc_2130,
+          date_time: DateTime.shift(current_date_time, hour: 1),
           condition: :thunderstorm,
           code: 200
         )
         |> WeatherReport.add_weather(
-          date_time: utc_2130,
+          date_time: DateTime.shift(current_date_time, hour: 2),
           condition: :rain,
           code: 500
         )
@@ -105,7 +111,7 @@ defmodule MyUmbrella.PrecipitationTest do
 
       expected_weather =
         Weather.new(
-          date_time: utc_2130,
+          date_time: DateTime.shift(current_date_time, hour: 1),
           condition: :thunderstorm,
           code: 200
         )
