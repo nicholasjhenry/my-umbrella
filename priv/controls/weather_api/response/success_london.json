@@ -19,9 +19,9 @@
     "wind_deg": 270,
     "weather": [
       {
-        "id": 802,
+        "id": 801,
         "main": "Clouds",
-        "description": "scattered clouds",
+        "description": "light clouds",
         "icon": "03d"
       }
     ]
@@ -114,9 +114,9 @@
       "wind_gust": 7.19,
       "weather": [
         {
-          "id": 804,
+          "id": 801,
           "main": "Clouds",
-          "description": "overcast clouds",
+          "description": "light clouds",
           "icon": "04d"
         }
       ],

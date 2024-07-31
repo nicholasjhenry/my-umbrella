@@ -7,23 +7,11 @@ defmodule MyUmbrella.PrecipitationTest do
 
   alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControl
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
+  alias MyUmbrella.Controls.Weather, as: WeatherControl
 
   test "comparing two weather forecasts with a percipitation condition" do
-    current_date_time = CurrentDateTimeControl.Utc.example(:london)
-
-    snow =
-      Weather.new(
-        date_time: current_date_time,
-        code: 600,
-        condition: :snow
-      )
-
-    thunderstorm =
-      Weather.new(
-        date_time: current_date_time,
-        code: 200,
-        condition: :thunderstorm
-      )
+    snow = WeatherControl.Snow.example()
+    thunderstorm = WeatherControl.Thunderstorm.example()
 
     assert Precipitation.compare(snow, snow) == :eq
     assert Precipitation.compare(snow, thunderstorm) == :gt
@@ -49,23 +37,12 @@ defmodule MyUmbrella.PrecipitationTest do
 
       weather_report =
         WeatherReport.new(coordinates: london, time_zone: current_date_time.time_zone)
-        |> WeatherReport.add_weather(
-          date_time: current_date_time,
-          code: 500,
-          condition: :rain
-        )
+        |> WeatherReport.add_weather(WeatherControl.Rain.attributes())
 
       result = Precipitation.determine_most_intense_precipitation_condition(weather_report)
 
-      expected_weather =
-        Weather.new(
-          date_time: current_date_time,
-          code: 500,
-          condition: :rain
-        )
-
       assert {:precipitation, actual_weather} = result
-      assert Weather.eq?(actual_weather, expected_weather)
+      assert Weather.eq?(actual_weather, WeatherControl.Rain.example())
     end
 
     test "given a single weather report with no precipitation; then returns nothing" do
@@ -74,11 +51,7 @@ defmodule MyUmbrella.PrecipitationTest do
 
       weather_report =
         WeatherReport.new(coordinates: london, time_zone: current_date_time.time_zone)
-        |> WeatherReport.add_weather(
-          date_time: current_date_time,
-          code: 800,
-          condition: :clear
-        )
+        |> WeatherReport.add_weather(WeatherControl.Clear.attributes())
 
       result = Precipitation.determine_most_intense_precipitation_condition(weather_report)
 
@@ -91,31 +64,18 @@ defmodule MyUmbrella.PrecipitationTest do
 
       weather_report =
         WeatherReport.new(coordinates: london, time_zone: "Etc/UTC")
+        |> WeatherReport.add_weather(WeatherControl.Drizzle.attributes(current_date_time))
         |> WeatherReport.add_weather(
-          date_time: current_date_time,
-          condition: :drizzle,
-          code: 300
+          WeatherControl.Thunderstorm.attributes(DateTime.shift(current_date_time, hour: 1))
         )
         |> WeatherReport.add_weather(
-          date_time: DateTime.shift(current_date_time, hour: 1),
-          condition: :thunderstorm,
-          code: 200
-        )
-        |> WeatherReport.add_weather(
-          date_time: DateTime.shift(current_date_time, hour: 2),
-          condition: :rain,
-          code: 500
+          WeatherControl.Rain.attributes(DateTime.shift(current_date_time, hour: 2))
         )
 
-      result =
-        Precipitation.determine_most_intense_precipitation_condition(weather_report)
+      result = Precipitation.determine_most_intense_precipitation_condition(weather_report)
 
       expected_weather =
-        Weather.new(
-          date_time: DateTime.shift(current_date_time, hour: 1),
-          condition: :thunderstorm,
-          code: 200
-        )
+        WeatherControl.Thunderstorm.attributes(DateTime.shift(current_date_time, hour: 1))
 
       assert {:precipitation, actual_weather} = result
       assert Weather.eq?(expected_weather, actual_weather)

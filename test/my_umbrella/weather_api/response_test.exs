@@ -6,11 +6,12 @@ defmodule MyUmbrella.WeatherApi.ResponseTest do
 
   alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControls
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
+  alias MyUmbrella.Controls.Weather, as: WeatherControl
 
   describe "converting a response" do
     test "given an API response; returns a weather report for current and forecasted conditions",
          %{control_path: control_path} do
-      control_pathname = Path.join([control_path, "weather_api/response/success.json"])
+      control_pathname = Path.join([control_path, "weather_api/response/success_london.json"])
       response = control_pathname |> File.read!() |> :json.decode()
 
       result = Response.to_weather_report(response)
@@ -24,25 +25,12 @@ defmodule MyUmbrella.WeatherApi.ResponseTest do
 
       assert Enum.count(weather_report.weather) == 5
 
-      expected_current_weather =
-        Weather.new(
-          date_time: current_date_time,
-          condition: :clouds,
-          code: 802
-        )
-
       actual_current_weather = List.first(weather_report.weather)
-
-      assert Weather.eq?(expected_current_weather, actual_current_weather)
+      assert Weather.eq?(WeatherControl.Cloud.example(), actual_current_weather)
 
       actual_forecasted_weather = List.last(weather_report.weather)
 
-      expected_forecasted_weather =
-        Weather.new(
-          date_time: ~U[2000-01-02 01:00:00Z],
-          condition: :clouds,
-          code: 804
-        )
+      expected_forecasted_weather = WeatherControl.Cloud.example(~U[2000-01-02 01:00:00Z])
 
       assert Weather.eq?(expected_forecasted_weather, actual_forecasted_weather)
     end

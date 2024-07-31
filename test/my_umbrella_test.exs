@@ -5,6 +5,7 @@ defmodule MyUmbrellaTest do
 
   alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControl
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
+  alias MyUmbrella.Controls.Weather, as: WeatherControl
 
   describe "determine if an umbrella is needed today" do
     test "given it IS raining before end-of-day; then an umbrella IS needed" do
@@ -14,7 +15,7 @@ defmodule MyUmbrellaTest do
       weather_result = MyUmbrella.for_today(london, current_date_time)
 
       before_midnight = CurrentDateTimeControl.before_midnight(current_date_time)
-      expected_weather = Weather.new(date_time: before_midnight, condition: :rain, code: 501)
+      expected_weather = WeatherControl.Rain.example(before_midnight)
 
       assert {:ok, {:precipitation, actual_weather}} = weather_result
       assert Weather.eq?(actual_weather, expected_weather)
