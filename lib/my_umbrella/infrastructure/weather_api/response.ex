@@ -1,4 +1,4 @@
-defmodule MyUmbrella.WeatherApi.Response do
+defmodule MyUmbrella.Infrastructure.WeatherApi.Response do
   @moduledoc """
   The type representing a response from the weather api.
   """

@@ -1,4 +1,4 @@
-defmodule MyUmbrella.WeatherApi do
+defmodule MyUmbrella.Infrastructure.WeatherApi do
   @moduledoc """
   An external dependency to get weather forecasts.
 
@@ -6,9 +6,9 @@ defmodule MyUmbrella.WeatherApi do
   - Weather Conditions: https://openweathermap.org/weather-conditions
   """
 
-  alias MyUmbrella.WeatherApi.Response
+  alias MyUmbrella.Infrastructure.WeatherApi.Response
 
-  alias MyUmbrella.Controls.WeatherApi, as: WeatherApiControl
+  alias MyUmbrella.Controls.Infrastructure.WeatherApi, as: WeatherApiControl
 
   @type coordinates :: {float(), float()}
 

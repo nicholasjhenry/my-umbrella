@@ -5,8 +5,9 @@ defmodule MyUmbrella do
 
   alias MyUmbrella.Coordinates
   alias MyUmbrella.Precipitation
-  alias MyUmbrella.WeatherApi
   alias MyUmbrella.WeatherReport
+
+  alias MyUmbrella.Infrastructure.WeatherApi
 
   @spec for_today(Coordinates.t()) :: {:ok, Precipitation.t()} | {:error, term}
   @spec for_today(Coordinates.t(), DateTime.t()) :: {:ok, Precipitation.t()} | {:error, term}

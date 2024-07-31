@@ -1,8 +1,9 @@
-defmodule MyUmbrella.WeatherApi.ResponseTest do
+defmodule MyUmbrella.Infrastucture.WeatherApi.ResponseTest do
   use MyUmbrella.TestCase, async: true
 
   alias MyUmbrella.Weather
-  alias MyUmbrella.WeatherApi.Response
+
+  alias MyUmbrella.Infrastructure.WeatherApi.Response
 
   alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControls
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
