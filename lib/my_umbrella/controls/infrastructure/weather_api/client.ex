@@ -1,7 +1,7 @@
-defmodule MyUmbrella.Controls.Infrastructure.WeatherApi do
+defmodule MyUmbrella.Controls.Infrastructure.WeatherApi.Client do
   @moduledoc false
 
-  alias MyUmbrella.Infrastructure.Response
+  alias MyUmbrella.Infrastructure.WeatherApi.Response
 
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
 

@@ -1,4 +1,4 @@
-defmodule MyUmbrella.Infrastructure.WeatherApi do
+defmodule MyUmbrella.Infrastructure.WeatherApi.Client do
   @moduledoc """
   An external dependency to get weather forecasts.
 
@@ -14,6 +14,6 @@ defmodule MyUmbrella.Infrastructure.WeatherApi do
 
   @spec get_forecast(coordinates, duration :: :today) :: {:ok, Response.t()}
   def get_forecast(coordinates, :today) do
-    WeatherApiControl.get_forecast(coordinates, :today)
+    WeatherApiControl.Client.get_forecast(coordinates, :today)
   end
 end
