@@ -1,15 +1,14 @@
 defmodule MyUmbrellaWeb.ControllerTest do
   use MyUmbrella.ConnCase, async: true
 
-  alias MyUmbrella.Coordinates
-
   alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControl
+  alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
 
   alias MyUmbrellaWeb.Controller
 
   describe "determining if an umbrella is required today" do
     test "given it IS raining before end-of-day; then an umbrella IS needed", %{conn: conn} do
-      london = Coordinates.new(51.5098, -0.118)
+      london = CoordinatesControl.example(:london)
       current_date_time_utc = CurrentDateTimeControl.Utc.example(:london)
       conn = Plug.Conn.assign(conn, :current_date_time_utc, current_date_time_utc)
 
@@ -22,8 +21,8 @@ defmodule MyUmbrellaWeb.ControllerTest do
     test "given it IS NOT raining before end-of-day; then an umbrella IS NOT needed", %{
       conn: conn
     } do
-      orlando = Coordinates.new(28.5383, -81.3792)
-      current_date_time_utc = CurrentDateTimeControl.Utc.example(:london)
+      orlando = CoordinatesControl.example(:orlando)
+      current_date_time_utc = CurrentDateTimeControl.Utc.example(:orlando)
       conn = Plug.Conn.assign(conn, :current_date_time_utc, current_date_time_utc)
 
       conn = Controller.show(conn, to_params(orlando))

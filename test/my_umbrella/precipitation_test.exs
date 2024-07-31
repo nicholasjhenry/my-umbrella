@@ -1,12 +1,12 @@
 defmodule MyUmbrella.PrecipitationTest do
   use MyUmbrella.TestCase, async: true
 
-  alias MyUmbrella.Coordinates
   alias MyUmbrella.Precipitation
   alias MyUmbrella.Weather
   alias MyUmbrella.WeatherReport
 
   alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControl
+  alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
 
   test "comparing two weather forecasts with a percipitation condition" do
     current_date_time = CurrentDateTimeControl.Utc.example(:london)
@@ -29,10 +29,8 @@ defmodule MyUmbrella.PrecipitationTest do
   end
 
   describe "determining the most intense precipitation condition" do
-    @tag :wip
-
     test "given an empty list; then returns nothing" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = CoordinatesControl.example(:london)
       current_date_time = CurrentDateTimeControl.Utc.example(:london)
 
       weather_report =
@@ -44,7 +42,7 @@ defmodule MyUmbrella.PrecipitationTest do
     end
 
     test "given a single weather report with precipitation; then returns that weather report" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = CoordinatesControl.example(:london)
       current_date_time = CurrentDateTimeControl.Utc.example(:london)
 
       weather_report =
@@ -68,7 +66,7 @@ defmodule MyUmbrella.PrecipitationTest do
     end
 
     test "given a single weather report with no precipitation; then returns nothing" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = CoordinatesControl.example(:london)
       current_date_time = CurrentDateTimeControl.Utc.example(:london)
 
       weather_report =
@@ -85,7 +83,7 @@ defmodule MyUmbrella.PrecipitationTest do
     end
 
     test "given multiple weather reports with precipitation; then returns the most intense weather report" do
-      london = Coordinates.new(51.5098, -0.118)
+      london = CoordinatesControl.example(:london)
       current_date_time = CurrentDateTimeControl.Utc.example(:london)
 
       weather_report =
