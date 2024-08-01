@@ -8,9 +8,10 @@ defmodule MyUmbrellaWeb.Controller do
   def show(conn, %{"lat" => lat, "lon" => lon}) do
     coordinates = MyUmbrella.Coordinates.parse(lat, lon)
     current_date_time_utc = Map.get(conn.assigns, :current_date_time_utc, DateTime.utc_now())
+    my_umbrella = Map.get(conn.assigns, :my_umbrella, MyUmbrella.create())
 
     {status_code, text} =
-      case MyUmbrella.for_today(coordinates, current_date_time_utc) do
+      case MyUmbrella.for_today(my_umbrella, coordinates, current_date_time_utc) do
         {:ok, :no_precipitation} -> {200, "No, not today!"}
         {:ok, {:precipitation, _weather}} -> {200, "Yes, definitey!"}
       end
