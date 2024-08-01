@@ -28,6 +28,9 @@ defmodule MyUmbrella.MixProject do
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:mix_test_watch, "~> 1.1", only: [:dev, :test], runtime: false},
+      {:bypass, "~> 2.1", only: :test},
+      {:httpoison, "~> 2.2"},
+      {:jason, "~> 1.4"},
       {:plug_cowboy, "~> 2.7"},
       {:tz, "~> 0.3.0"}
     ]
