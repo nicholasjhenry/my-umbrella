@@ -37,13 +37,13 @@ defmodule MyUmbrella.Infrastructure.Http.Client do
   alias Nullables.OutputTracking
 
   @type t() :: %Http.Client{
-          http_poison: HTTPoison | Http.Client.StubbedHttpPoison
+          httpoison: HTTPoison | Http.Client.StubbedHTTPoison
         }
 
-  @enforce_keys [:http_poison]
-  defstruct [:http_poison]
+  @enforce_keys [:httpoison]
+  defstruct [:httpoison]
 
-  defmodule StubbedHttpPoison do
+  defmodule StubbedHTTPoison do
     @moduledoc """
     > Nullables need to disable access to external systems and state while running everything else normally.
     > The obvious approach is to surround any code that accesses the external system with an “if” statement,
@@ -65,7 +65,7 @@ defmodule MyUmbrella.Infrastructure.Http.Client do
 
     defp get_response(url) do
       ConfigurableResponses.get_response(
-        StubbedHttpPoison,
+        StubbedHTTPoison,
         url,
         HttpControls.Response.NotImplemented.example()
       )
@@ -84,13 +84,13 @@ defmodule MyUmbrella.Infrastructure.Http.Client do
 
   @spec create() :: t()
   def create do
-    %Http.Client{http_poison: HTTPoison}
+    %Http.Client{httpoison: HTTPoison}
   end
 
   @spec create_null(ConfigurableResponses.responses()) :: t()
   def create_null(responses \\ []) do
-    {:ok, _pid} = ConfigurableResponses.start_link(StubbedHttpPoison, responses)
-    %Http.Client{http_poison: StubbedHttpPoison}
+    {:ok, _pid} = ConfigurableResponses.start_link(StubbedHTTPoison, responses)
+    %Http.Client{httpoison: StubbedHTTPoison}
   end
 
   @spec get(t(), String.t()) :: {:ok, Http.Response.t()}
@@ -98,7 +98,7 @@ defmodule MyUmbrella.Infrastructure.Http.Client do
     headers = [{"Content-Type", "application/json"}]
     request = Http.Request.new(url: url, headers: headers)
 
-    {:ok, httpoison_response} = client.http_poison.get(request.url, request.headers)
+    {:ok, httpoison_response} = client.httpoison.get(request.url, request.headers)
 
     :ok = OutputTracking.emit([:http_client, :requests], request)
 
