@@ -4,7 +4,7 @@ defmodule MyUmbrellaWeb.ControllerTest do
   alias MyUmbrella.Infrastructure.WeatherApi
 
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
-  alias MyUmbrella.Infrastructure.Calendar.Controls.CurrentDateTime, as: CurrentDateTimeControl
+  alias MyUmbrella.Infrastructure.Calendar.Controls.DateTime, as: DateTimeControl
   alias MyUmbrella.Infrastructure.WeatherApi.Controls, as: WeatherApiControls
 
   alias MyUmbrellaWeb.Controller
@@ -12,7 +12,7 @@ defmodule MyUmbrellaWeb.ControllerTest do
   describe "determining if an umbrella is required today" do
     test "given it IS raining before end-of-day; then an umbrella IS needed", %{conn: conn} do
       london = CoordinatesControl.example(:london)
-      current_date_time_utc = CurrentDateTimeControl.Utc.example(:london)
+      current_date_time_utc = DateTimeControl.Utc.example(:london)
 
       my_umbrella =
         MyUmbrella.create_null(%{
@@ -29,7 +29,7 @@ defmodule MyUmbrellaWeb.ControllerTest do
       conn: conn
     } do
       orlando = CoordinatesControl.example(:orlando)
-      current_date_time_utc = CurrentDateTimeControl.Utc.example(:orlando)
+      current_date_time_utc = DateTimeControl.Utc.example(:orlando)
 
       my_umbrella =
         MyUmbrella.create_null(%{

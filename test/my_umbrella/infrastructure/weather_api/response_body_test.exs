@@ -24,7 +24,7 @@ defmodule MyUmbrella.Infrastucture.WeatherApi.ResponseBodyTest do
 
       london = CoordinatesControl.example(:london)
 
-      current_date_time = CalendarControls.CurrentDateTime.Utc.example(:london)
+      current_date_time = CalendarControls.DateTime.Utc.example(:london)
 
       assert weather_report.coordinates == london
       assert weather_report.time_zone == current_date_time.time_zone

@@ -1,4 +1,4 @@
-defmodule MyUmbrella.Infrastructure.Calendar.Controls.CurrentDateTime do
+defmodule MyUmbrella.Infrastructure.Calendar.Controls.DateTime do
   @moduledoc false
 
   @spec before_midnight(DateTime.t()) :: DateTime.t()

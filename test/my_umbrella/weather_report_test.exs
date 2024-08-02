@@ -7,11 +7,11 @@ defmodule MyUmbrella.WeatherReportTest do
   alias MyUmbrella.Controls.Weather, as: WeatherControl
   alias MyUmbrella.Controls.WeatherReport, as: WeatherReportControl
 
-  alias MyUmbrella.Infrastructure.Calendar.Controls.CurrentDateTime, as: CurrentDateTimeControl
+  alias MyUmbrella.Infrastructure.Calendar.Controls.DateTime, as: DateTimeControl
 
   describe "filter weather report for the same day" do
     test "given an empty list; then returns an empty list" do
-      current_date_time = CurrentDateTimeControl.LocalTime.example(:london)
+      current_date_time = DateTimeControl.LocalTime.example(:london)
       weather_report = WeatherReportControl.example()
 
       filtered_weather_report =
@@ -21,8 +21,8 @@ defmodule MyUmbrella.WeatherReportTest do
     end
 
     test "given a single weather forecast reported before midnight; then includes that weather forecast" do
-      current_date_time = CurrentDateTimeControl.LocalTime.example(:london)
-      before_midnight = CurrentDateTimeControl.before_midnight(current_date_time)
+      current_date_time = DateTimeControl.LocalTime.example(:london)
+      before_midnight = DateTimeControl.before_midnight(current_date_time)
 
       weather_report =
         WeatherReportControl.example()
@@ -37,8 +37,8 @@ defmodule MyUmbrella.WeatherReportTest do
     end
 
     test "given a single weather report after midnight; then excludes that report" do
-      current_date_time = CurrentDateTimeControl.LocalTime.example(:london)
-      after_midnight = CurrentDateTimeControl.after_midnight(current_date_time)
+      current_date_time = DateTimeControl.LocalTime.example(:london)
+      after_midnight = DateTimeControl.after_midnight(current_date_time)
 
       weather_report =
         WeatherReportControl.example()
@@ -51,8 +51,8 @@ defmodule MyUmbrella.WeatherReportTest do
     end
 
     test "given a weather report from another time zone before midnight; then includes that weather forecast" do
-      current_date_time = CurrentDateTimeControl.LocalTime.example(:orlando)
-      before_midnight = CurrentDateTimeControl.before_midnight(current_date_time)
+      current_date_time = DateTimeControl.LocalTime.example(:orlando)
+      before_midnight = DateTimeControl.before_midnight(current_date_time)
 
       weather_report =
         WeatherReportControl.example(:orlando)
@@ -67,8 +67,8 @@ defmodule MyUmbrella.WeatherReportTest do
     end
 
     test "given a weather report from another timezone after midnight; then excludes that weather forecast" do
-      current_date_time = CurrentDateTimeControl.LocalTime.example(:orlando)
-      after_midnight = CurrentDateTimeControl.after_midnight(current_date_time)
+      current_date_time = DateTimeControl.LocalTime.example(:orlando)
+      after_midnight = DateTimeControl.after_midnight(current_date_time)
 
       weather_report =
         WeatherReportControl.example(:orlando)
@@ -81,7 +81,7 @@ defmodule MyUmbrella.WeatherReportTest do
     end
 
     test "given a mismatch of timezones; then raises an error" do
-      current_date_time = CurrentDateTimeControl.LocalTime.example(:london)
+      current_date_time = DateTimeControl.LocalTime.example(:london)
 
       weather_report =
         WeatherReportControl.example(:london, "America/New_York")

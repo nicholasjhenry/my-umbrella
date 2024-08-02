@@ -8,7 +8,7 @@ defmodule MyUmbrella.PrecipitationTest do
   alias MyUmbrella.Controls.Weather, as: WeatherControl
   alias MyUmbrella.Controls.WeatherReport, as: WeatherReportControl
 
-  alias MyUmbrella.Infrastructure.Calendar.Controls.CurrentDateTime, as: CurrentDateTimeControl
+  alias MyUmbrella.Infrastructure.Calendar.Controls.DateTime, as: DateTimeControl
 
   test "comparing two weather forecasts with a percipitation condition" do
     snow = WeatherControl.Snow.example()
@@ -50,7 +50,7 @@ defmodule MyUmbrella.PrecipitationTest do
     end
 
     test "given multiple weather reports with precipitation; then returns the most intense weather report" do
-      current_date_time = CurrentDateTimeControl.Utc.example(:london)
+      current_date_time = DateTimeControl.Utc.example(:london)
       weather_report = WeatherReportControl.example()
 
       weather_report =

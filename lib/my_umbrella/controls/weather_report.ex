@@ -8,7 +8,7 @@ defmodule MyUmbrella.Controls.WeatherReport do
 
   def attributes(location \\ :london, time_zone \\ nil) do
     coordinates = CoordinatesControl.example(location)
-    timezone = time_zone || CalendarControls.CurrentDateTime.LocalTime.example(location).time_zone
+    timezone = time_zone || CalendarControls.DateTime.LocalTime.example(location).time_zone
 
     %{coordinates: coordinates, time_zone: timezone}
   end
