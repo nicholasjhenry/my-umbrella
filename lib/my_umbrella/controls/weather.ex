@@ -3,11 +3,11 @@ defmodule MyUmbrella.Controls.Weather do
 
   alias MyUmbrella.Weather
 
-  alias MyUmbrella.Controls.Calendar.CurrentDateTime.LocalTime
+  alias MyUmbrella.Infrastructure.Calendar.Controls, as: CalendarControls
 
   def attributes(date_time \\ nil) do
     %{
-      date_time: date_time || LocalTime.example(:london),
+      date_time: date_time || CalendarControls.CurrentDateTime.LocalTime.example(:london),
       code: 800,
       condition: :clear
     }
@@ -22,7 +22,7 @@ defmodule MyUmbrella.Controls.Weather do
 
     def attributes(date_time \\ nil) do
       %{
-        date_time: date_time || LocalTime.example(:london),
+        date_time: date_time || CalendarControls.CurrentDateTime.LocalTime.example(:london),
         condition: :clouds,
         code: 801
       }
@@ -38,7 +38,7 @@ defmodule MyUmbrella.Controls.Weather do
 
     def attributes(date_time \\ nil) do
       %{
-        date_time: date_time || LocalTime.example(:london),
+        date_time: date_time || CalendarControls.CurrentDateTime.LocalTime.example(:london),
         code: 300,
         condition: :drizzle
       }
@@ -54,7 +54,7 @@ defmodule MyUmbrella.Controls.Weather do
 
     def attributes(date_time \\ nil) do
       %{
-        date_time: date_time || LocalTime.example(:london),
+        date_time: date_time || CalendarControls.CurrentDateTime.LocalTime.example(:london),
         code: 501,
         condition: :rain
       }
@@ -70,7 +70,7 @@ defmodule MyUmbrella.Controls.Weather do
 
     def attributes(date_time \\ nil) do
       %{
-        date_time: date_time || LocalTime.example(:london),
+        date_time: date_time || CalendarControls.CurrentDateTime.LocalTime.example(:london),
         code: 600,
         condition: :snow
       }
@@ -86,7 +86,7 @@ defmodule MyUmbrella.Controls.Weather do
 
     def attributes(date_time \\ nil) do
       %{
-        date_time: date_time || LocalTime.example(:london),
+        date_time: date_time || CalendarControls.CurrentDateTime.LocalTime.example(:london),
         code: 200,
         condition: :thunderstorm
       }
@@ -102,7 +102,7 @@ defmodule MyUmbrella.Controls.Weather do
 
     def attributes(date_time \\ nil) do
       %{
-        date_time: date_time || LocalTime.example(:london),
+        date_time: date_time || CalendarControls.CurrentDateTime.LocalTime.example(:london),
         code: 800,
         condition: :clear
       }

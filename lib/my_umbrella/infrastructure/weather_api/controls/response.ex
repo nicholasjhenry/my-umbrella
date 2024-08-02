@@ -1,13 +1,14 @@
-defmodule MyUmbrella.Controls.Infrastructure.WeatherApi.Response do
+defmodule MyUmbrella.Infrastructure.WeatherApi.Controls.Response do
   @moduledoc false
 
   alias MyUmbrella.Infrastructure.JsonHttp
   alias MyUmbrella.Infrastructure.WeatherApi
 
-  alias MyUmbrella.Controls.Infrastructure.WeatherApi, as: WeatherApiControls
+  alias MyUmbrella.Infrastructure.WeatherApi.Controls, as: WeatherApiControls
 
   defmodule Success do
     @moduledoc false
+
     @spec example(:london | :orlando) :: WeatherApi.Response.t()
     def example(location) do
       body = WeatherApiControls.ResponseBody.Success.example(location)

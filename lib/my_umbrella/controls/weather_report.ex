@@ -3,12 +3,12 @@ defmodule MyUmbrella.Controls.WeatherReport do
 
   alias MyUmbrella.WeatherReport
 
-  alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControl
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
+  alias MyUmbrella.Infrastructure.Calendar.Controls, as: CalendarControls
 
   def attributes(location \\ :london, time_zone \\ nil) do
     coordinates = CoordinatesControl.example(location)
-    timezone = time_zone || CurrentDateTimeControl.LocalTime.example(location).time_zone
+    timezone = time_zone || CalendarControls.CurrentDateTime.LocalTime.example(location).time_zone
 
     %{coordinates: coordinates, time_zone: timezone}
   end

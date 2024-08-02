@@ -31,7 +31,7 @@ defmodule MyUmbrella.Infrastructure.JsonHttp.Client do
 
   alias MyUmbrella.Infrastructure.JsonHttp
 
-  alias MyUmbrella.Controls.Infrastructure.JsonHttp, as: JsonHttpControls
+  alias MyUmbrella.Infrastructure.JsonHttp.Controls, as: JsonHttpControls
 
   alias Nullables.ConfigurableResponses
   alias Nullables.OutputTracking

@@ -1,8 +1,7 @@
-defmodule MyUmbrella.Controls.Infrastructure.WeatherApi.Client do
+defmodule MyUmbrella.Infrastructure.WeatherApi.Controls.Client do
   @moduledoc false
 
   alias MyUmbrella.Coordinates
-
   alias MyUmbrella.Infrastructure.WeatherApi.Response
 
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
@@ -10,7 +9,10 @@ defmodule MyUmbrella.Controls.Infrastructure.WeatherApi.Client do
   @orlando CoordinatesControl.example(:orlando)
   @london CoordinatesControl.example(:london)
 
-  @control_path Application.app_dir(:my_umbrella, "priv/controls")
+  @control_path Application.app_dir(
+                  :my_umbrella,
+                  "priv/MyUmbrella.Infrastructure.Calendar.Controls"
+                )
 
   @spec get_forecast(Coordinates.t(), duration :: :today) :: {:ok, Response.t()}
   def get_forecast(@london, :today) do

@@ -3,11 +3,11 @@ defmodule MyUmbrellaTest do
 
   alias MyUmbrella.Weather
 
-  alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControl
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
   alias MyUmbrella.Controls.Weather, as: WeatherControl
 
-  alias MyUmbrella.Controls.Infrastructure.WeatherApi, as: WeatherApiControls
+  alias MyUmbrella.Infrastructure.Calendar.Controls.CurrentDateTime, as: CurrentDateTimeControl
+  alias MyUmbrella.Infrastructure.WeatherApi.Controls, as: WeatherApiControls
 
   describe "determine if an umbrella is needed today" do
     test "given it IS raining before end-of-day; then an umbrella IS needed" do

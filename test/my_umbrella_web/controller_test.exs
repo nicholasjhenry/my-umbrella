@@ -1,9 +1,11 @@
 defmodule MyUmbrellaWeb.ControllerTest do
   use MyUmbrella.ConnCase, async: true
 
-  alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControl
+  alias MyUmbrella.Infrastructure.WeatherApi
+
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
-  alias MyUmbrella.Controls.Infrastructure.WeatherApi, as: WeatherApiControls
+  alias MyUmbrella.Infrastructure.Calendar.Controls.CurrentDateTime, as: CurrentDateTimeControl
+  alias MyUmbrella.Infrastructure.WeatherApi.Controls, as: WeatherApiControls
 
   alias MyUmbrellaWeb.Controller
 

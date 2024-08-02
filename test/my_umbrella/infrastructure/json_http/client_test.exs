@@ -2,8 +2,7 @@ defmodule MyUmbrella.Infrastructure.JsonHttp.ClientTest do
   use MyUmbrella.TestCase, async: true
 
   alias MyUmbrella.Infrastructure.JsonHttp
-
-  alias MyUmbrella.Controls.Infrastructure.JsonHttp, as: JsonHttpControls
+  alias MyUmbrella.Infrastructure.JsonHttp.Controls, as: JsonHttpControls
 
   alias Nullables.OutputTracking
 
@@ -58,7 +57,7 @@ defmodule MyUmbrella.Infrastructure.JsonHttp.ClientTest do
       url = "http://NOT_CONNECTED/get"
 
       responses = [
-        {url, JsonHttpControls.Response.example()}
+        {url, JsonHttp.Controls.Response.example()}
       ]
 
       http_client = JsonHttp.Client.create_null(responses)

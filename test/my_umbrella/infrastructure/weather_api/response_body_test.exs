@@ -3,11 +3,12 @@ defmodule MyUmbrella.Infrastucture.WeatherApi.ResponseBodyTest do
 
   alias MyUmbrella.Weather
 
-  alias MyUmbrella.Infrastructure.WeatherApi.ResponseBody
-
-  alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControls
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
   alias MyUmbrella.Controls.Weather, as: WeatherControl
+
+  alias MyUmbrella.Infrastructure.WeatherApi.ResponseBody
+
+  alias MyUmbrella.Infrastructure.Calendar.Controls, as: CalendarControls
 
   describe "converting a response" do
     test "given an API response; returns a weather report for current and forecasted conditions",
@@ -22,7 +23,9 @@ defmodule MyUmbrella.Infrastucture.WeatherApi.ResponseBodyTest do
       assert {:ok, weather_report} = result
 
       london = CoordinatesControl.example(:london)
-      current_date_time = CurrentDateTimeControls.Utc.example(:london)
+
+      current_date_time = CalendarControls.CurrentDateTime.Utc.example(:london)
+
       assert weather_report.coordinates == london
       assert weather_report.time_zone == current_date_time.time_zone
 

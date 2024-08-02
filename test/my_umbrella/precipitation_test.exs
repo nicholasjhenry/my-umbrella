@@ -5,9 +5,10 @@ defmodule MyUmbrella.PrecipitationTest do
   alias MyUmbrella.Weather
   alias MyUmbrella.WeatherReport
 
-  alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControl
   alias MyUmbrella.Controls.Weather, as: WeatherControl
   alias MyUmbrella.Controls.WeatherReport, as: WeatherReportControl
+
+  alias MyUmbrella.Infrastructure.Calendar.Controls.CurrentDateTime, as: CurrentDateTimeControl
 
   test "comparing two weather forecasts with a percipitation condition" do
     snow = WeatherControl.Snow.example()

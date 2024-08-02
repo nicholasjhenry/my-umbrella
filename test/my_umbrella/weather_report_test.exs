@@ -4,9 +4,10 @@ defmodule MyUmbrella.WeatherReportTest do
   alias MyUmbrella.Weather
   alias MyUmbrella.WeatherReport
 
-  alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControl
   alias MyUmbrella.Controls.Weather, as: WeatherControl
   alias MyUmbrella.Controls.WeatherReport, as: WeatherReportControl
+
+  alias MyUmbrella.Infrastructure.Calendar.Controls.CurrentDateTime, as: CurrentDateTimeControl
 
   describe "filter weather report for the same day" do
     test "given an empty list; then returns an empty list" do

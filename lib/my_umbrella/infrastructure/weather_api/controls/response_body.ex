@@ -1,4 +1,4 @@
-defmodule MyUmbrella.Controls.Infrastructure.WeatherApi.ResponseBody do
+defmodule MyUmbrella.Infrastructure.WeatherApi.Controls.ResponseBody do
   @moduledoc false
 
   alias MyUmbrella.Infrastructure.WeatherApi.ResponseBody
@@ -7,7 +7,6 @@ defmodule MyUmbrella.Controls.Infrastructure.WeatherApi.ResponseBody do
     @moduledoc false
 
     @control_path Application.app_dir(:my_umbrella, "priv/controls")
-
     @spec example(:london | :orlando) :: ResponseBody.t()
     def example(:london) do
       control_pathname =

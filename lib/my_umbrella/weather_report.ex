@@ -3,6 +3,7 @@ defmodule MyUmbrella.WeatherReport do
   A form of communication for forecasting atmospheric conditions, precipitation, and
   wind patterns, for specific coordinates and time.
   """
+
   alias MyUmbrella.Coordinates
   alias MyUmbrella.Weather
 

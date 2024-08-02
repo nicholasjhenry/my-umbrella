@@ -10,7 +10,7 @@ defmodule MyUmbrella.TestCase do
   end
 
   setup _context do
-    control_path = Application.app_dir(:my_umbrella, "priv/controls")
+    control_path = Application.app_dir(:my_umbrella, "priv/controls/")
 
     %{control_path: control_path}
   end

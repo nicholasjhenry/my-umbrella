@@ -4,7 +4,7 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.ClientTest do
   alias MyUmbrella.Infrastructure.WeatherApi
 
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
-  alias MyUmbrella.Controls.Infrastructure.WeatherApi, as: WeatherApiControls
+  alias MyUmbrella.Infrastructure.WeatherApi.Controls, as: WeatherApiControls
 
   alias Nullables.OutputTracking
 

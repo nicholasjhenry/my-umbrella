@@ -1,4 +1,4 @@
-defmodule MyUmbrella.Controls.Infrastructure.JsonHttp.Response do
+defmodule MyUmbrella.Infrastructure.JsonHttp.Controls.Response do
   @moduledoc false
 
   alias MyUmbrella.Infrastructure.JsonHttp.Response
