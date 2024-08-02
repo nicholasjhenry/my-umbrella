@@ -8,9 +8,6 @@ defmodule MyUmbrella.Infrastructure.JsonHttp.ClientTest do
   alias Nullables.OutputTracking
 
   setup do
-    # NJH
-    {:ok, _} = Registry.start_link(keys: :unique, name: MyUmbrella.Infrastructure.Registry)
-
     bypass = Bypass.open()
     {:ok, bypass: bypass}
   end
