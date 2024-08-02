@@ -1,6 +1,6 @@
-defmodule MyUmbrella.Infrastructure.Http.Client do
+defmodule MyUmbrella.Infrastructure.JsonHttp.Client do
   @moduledoc """
-  A nullable low-level infrastructure wrapper for the HTTP protocol.
+  A nullable low-level infrastructure wrapper for the HTTP protocol and JSON content type.
 
   ## Infrastructure Wrappers
 
@@ -29,14 +29,14 @@ defmodule MyUmbrella.Infrastructure.Http.Client do
   -- https://www.jamesshore.com/v2/projects/nullables/testing-without-mocks#nullables
   """
 
-  alias MyUmbrella.Infrastructure.Http
+  alias MyUmbrella.Infrastructure.JsonHttp
 
-  alias MyUmbrella.Controls.Infrastructure.Http, as: HttpControls
+  alias MyUmbrella.Controls.Infrastructure.JsonHttp, as: JsonHttpControls
 
   alias Nullables.ConfigurableResponses
   alias Nullables.OutputTracking
 
-  @type t() :: %Http.Client{
+  @type t() :: %JsonHttp.Client{
           httpoison: HTTPoison | Http.Client.StubbedHTTPoison
         }
 
@@ -70,7 +70,7 @@ defmodule MyUmbrella.Infrastructure.Http.Client do
       ConfigurableResponses.get_response(
         :httpoison,
         endpoint,
-        HttpControls.Response.NotImplemented.example()
+        JsonHttpControls.Response.NotImplemented.example()
       )
     end
 
@@ -87,26 +87,25 @@ defmodule MyUmbrella.Infrastructure.Http.Client do
 
   @spec create() :: t()
   def create do
-    %Http.Client{httpoison: HTTPoison}
+    %JsonHttp.Client{httpoison: HTTPoison}
   end
 
   @spec create_null(ConfigurableResponses.responses()) :: t()
   def create_null(responses \\ []) do
     {:ok, _pid} = ConfigurableResponses.start_link(:httpoison, responses)
-    %Http.Client{httpoison: StubbedHTTPoison}
+    %JsonHttp.Client{httpoison: StubbedHTTPoison}
   end
 
   @spec get(t(), String.t()) :: {:ok, Http.Response.t()}
   def get(http_client, url) do
-    headers = [{"Content-Type", "application/json"}]
-    request = Http.Request.new(url: url, headers: headers)
+    request = JsonHttp.Request.new(url: url)
 
     {:ok, httpoison_response} = http_client.httpoison.get(request.url, request.headers)
 
     :ok = OutputTracking.emit([:http_client, :requests], request)
 
     response =
-      Http.Response.new(
+      JsonHttp.Response.new(
         status_code: httpoison_response.status_code,
         headers: httpoison_response.headers,
         body: Jason.decode!(httpoison_response.body)

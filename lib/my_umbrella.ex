@@ -8,7 +8,7 @@ defmodule MyUmbrella do
   alias MyUmbrella.Precipitation
   alias MyUmbrella.WeatherReport
 
-  alias MyUmbrella.Infrastructure.Http
+  alias MyUmbrella.Infrastructure.JsonHttp
   alias MyUmbrella.Infrastructure.WeatherApi
 
   alias MyUmbrella.Controls.Infrastructure.WeatherApi, as: WeatherApiControls
@@ -60,14 +60,14 @@ defmodule MyUmbrella do
 
     def with_preciptation(responses) do
       body = WeatherApiControls.Response.Success.example(:london)
-      response = Http.Response.new(status_code: 200, body: body)
+      response = JsonHttp.Response.new(status_code: 200, body: body)
 
       %{responses | weather_api: response}
     end
 
     def no_preciptation(responses) do
       body = WeatherApiControls.Response.Success.example(:orlando)
-      response = Http.Response.new(status_code: 200, body: body)
+      response = JsonHttp.Response.new(status_code: 200, body: body)
 
       %{responses | weather_api: response}
     end

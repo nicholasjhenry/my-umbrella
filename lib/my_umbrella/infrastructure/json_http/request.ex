@@ -1,21 +1,21 @@
-defmodule MyUmbrella.Infrastructure.Http.Request do
+defmodule MyUmbrella.Infrastructure.JsonHttp.Request do
   @moduledoc """
   A network communication with a method and URL endpoint. For example:
   a `GET` method to retrieve data from `/api/users` endpoint.
   """
 
-  alias __MODULE__, as: Request
+  alias __MODULE__, as: JsonRequest
 
   @type headers() :: [{String.t(), String.t()}]
 
-  @type t() :: %Request{
+  @type t() :: %JsonRequest{
           url: String.t(),
           headers: headers(),
-          body: String.t()
+          body: map()
         }
 
-  @enforce_keys [:url, :headers]
-  defstruct [:url, method: :get, headers: [], body: ""]
+  @enforce_keys [:url]
+  defstruct [:url, method: :get, headers: [{"Content-Type", "application/json"}], body: %{}]
 
   @spec new(keyword()) :: t()
   def new(attrs) do

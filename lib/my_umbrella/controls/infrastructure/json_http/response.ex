@@ -1,13 +1,12 @@
-defmodule MyUmbrella.Controls.Infrastructure.Http.Response do
+defmodule MyUmbrella.Controls.Infrastructure.JsonHttp.Response do
   @moduledoc false
 
-  alias MyUmbrella.Infrastructure.Http.Response
+  alias MyUmbrella.Infrastructure.JsonHttp.Response
 
-  @spec example() :: Response.t()
+  @spec example() :: JsonResponse.t()
   def example do
     Response.new(
       status_code: 200,
-      headers: [{"Content-Type", "application/json; charset=utf-8"}],
       body: %{"hello" => "world"}
     )
   end
@@ -19,7 +18,6 @@ defmodule MyUmbrella.Controls.Infrastructure.Http.Response do
     def example do
       Response.new(
         status_code: 503,
-        headers: [{"Content-Type", "application/json; charset=utf-8"}],
         body: %{"error" => "Not implemented"}
       )
     end

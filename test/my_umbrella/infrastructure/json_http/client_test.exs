@@ -1,13 +1,14 @@
-defmodule MyUmbrella.Infrastructure.Http.ClientTest do
+defmodule MyUmbrella.Infrastructure.JsonHttp.ClientTest do
   use MyUmbrella.TestCase, async: true
 
-  alias MyUmbrella.Infrastructure.Http
+  alias MyUmbrella.Infrastructure.JsonHttp
 
-  alias MyUmbrella.Controls.Infrastructure.Http, as: HttpControls
+  alias MyUmbrella.Controls.Infrastructure.JsonHttp, as: JsonHttpControls
 
   alias Nullables.OutputTracking
 
   setup do
+    # NJH
     {:ok, _} = Registry.start_link(keys: :unique, name: MyUmbrella.Infrastructure.Registry)
 
     bypass = Bypass.open()
@@ -27,9 +28,10 @@ defmodule MyUmbrella.Infrastructure.Http.ClientTest do
       |> Plug.Conn.resp(200, body)
     end)
 
-    http_client = Http.Client.create()
+    http_client = JsonHttp.Client.create()
 
-    result = Http.Client.get(http_client, "http://localhost:#{bypass.port}/get?foo=bar&baz=qux")
+    result =
+      JsonHttp.Client.get(http_client, "http://localhost:#{bypass.port}/get?foo=bar&baz=qux")
 
     assert {:ok, actual_response} = result
     assert actual_response.status_code == 200
@@ -39,15 +41,15 @@ defmodule MyUmbrella.Infrastructure.Http.ClientTest do
 
   describe "nullability" do
     test "default response", %{test: test} do
-      http_client = Http.Client.create_null()
+      http_client = JsonHttp.Client.create_null()
       ref = OutputTracking.track_output(test, [:http_client, :requests])
 
-      result = Http.Client.get(http_client, "http://NOT_CONNECTED/get")
+      result = JsonHttp.Client.get(http_client, "http://NOT_CONNECTED/get")
 
-      expected_response = HttpControls.Response.NotImplemented.example()
+      expected_response = JsonHttpControls.Response.NotImplemented.example()
 
       assert_received {[:http_client, :requests], ^ref,
-                       %Http.Request{url: "http://NOT_CONNECTED/get"}}
+                       %JsonHttp.Request{url: "http://NOT_CONNECTED/get"}}
 
       assert {:ok, actual_response} = result
       assert actual_response.status_code == expected_response.status_code
@@ -59,12 +61,12 @@ defmodule MyUmbrella.Infrastructure.Http.ClientTest do
       url = "http://NOT_CONNECTED/get"
 
       responses = [
-        {url, HttpControls.Response.example()}
+        {url, JsonHttpControls.Response.example()}
       ]
 
-      http_client = Http.Client.create_null(responses)
+      http_client = JsonHttp.Client.create_null(responses)
 
-      result = Http.Client.get(http_client, url)
+      result = JsonHttp.Client.get(http_client, url)
 
       assert {:ok, actual_response} = result
       assert actual_response.status_code == 200

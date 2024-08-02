@@ -1,7 +1,7 @@
 defmodule MyUmbrella.Infrastructure.WeatherApi.ClientTest do
   use MyUmbrella.TestCase, async: true
 
-  alias MyUmbrella.Infrastructure.Http
+  alias MyUmbrella.Infrastructure.JsonHttp
   alias MyUmbrella.Infrastructure.WeatherApi
 
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
@@ -14,7 +14,7 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.ClientTest do
       london = CoordinatesControl.example(:london)
 
       body = WeatherApiControls.Response.Success.example(:london)
-      response = Http.Response.new(status_code: 200, body: body)
+      response = JsonHttp.Response.new(status_code: 200, body: body)
 
       ref = OutputTracking.track_output(test, [:http_client, :requests])
 
@@ -40,7 +40,7 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.ClientTest do
       london = CoordinatesControl.example(:london)
 
       body = WeatherApiControls.Response.Success.example(:london)
-      response = Http.Response.new(status_code: 401, body: body)
+      response = JsonHttp.Response.new(status_code: 401, body: body)
 
       result =
         response

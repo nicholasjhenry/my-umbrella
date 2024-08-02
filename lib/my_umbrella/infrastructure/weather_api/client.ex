@@ -6,13 +6,13 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.Client do
   - Weather Conditions: https://openweathermap.org/weather-conditions
   """
 
-  alias MyUmbrella.Infrastructure.Http
+  alias MyUmbrella.Infrastructure.JsonHttp
   alias MyUmbrella.Infrastructure.WeatherApi
 
   alias MyUmbrella.Controls.Infrastructure.WeatherApi, as: WeatherApiControls
 
   @type t() :: %WeatherApi.Client{
-          http_client: Http.Client.t()
+          http_client: JsonHttp.Client.t()
         }
 
   defstruct [:http_client, :app_id]
@@ -36,11 +36,11 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.Client do
       |> append_coorindates_query(coordinates)
       |> URI.to_string()
 
-    case Http.Client.get(weather_api_client.http_client, url) do
-      {:ok, %Http.Response{status_code: 200} = response} ->
+    case JsonHttp.Client.get(weather_api_client.http_client, url) do
+      {:ok, %JsonHttp.Response{status_code: 200} = response} ->
         {:ok, response.body}
 
-      {:ok, %Http.Response{status_code: status_code}} ->
+      {:ok, %JsonHttp.Response{status_code: status_code}} ->
         {:error, {:status, status_code}}
     end
   end
@@ -57,7 +57,7 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.Client do
   @spec create() :: t()
   def create do
     %WeatherApi.Client{
-      http_client: Http.Client.create(),
+      http_client: JsonHttp.Client.create(),
       app_id: get_app_id()
     }
   end
@@ -66,7 +66,7 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.Client do
   @spec create_null(Http.Response.t()) :: t()
   def create_null do
     body = WeatherApiControls.Response.Success.example(:london)
-    response = Http.Response.new(status_code: 200, body: body)
+    response = JsonHttp.Response.new(status_code: 200, body: body)
 
     create_null(response)
   end
@@ -77,7 +77,7 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.Client do
     ]
 
     %WeatherApi.Client{
-      http_client: Http.Client.create_null(responses),
+      http_client: JsonHttp.Client.create_null(responses),
       app_id: get_app_id()
     }
   end
