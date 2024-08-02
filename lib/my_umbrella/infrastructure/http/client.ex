@@ -64,9 +64,12 @@ defmodule MyUmbrella.Infrastructure.Http.Client do
     end
 
     defp get_response(url) do
+      uri = URI.parse(url)
+      endpoint = "#{uri.scheme}://#{uri.host}#{uri.path}"
+
       ConfigurableResponses.get_response(
-        StubbedHTTPoison,
-        url,
+        :httpoison,
+        endpoint,
         HttpControls.Response.NotImplemented.example()
       )
     end
@@ -89,16 +92,16 @@ defmodule MyUmbrella.Infrastructure.Http.Client do
 
   @spec create_null(ConfigurableResponses.responses()) :: t()
   def create_null(responses \\ []) do
-    {:ok, _pid} = ConfigurableResponses.start_link(StubbedHTTPoison, responses)
+    {:ok, _pid} = ConfigurableResponses.start_link(:httpoison, responses)
     %Http.Client{httpoison: StubbedHTTPoison}
   end
 
   @spec get(t(), String.t()) :: {:ok, Http.Response.t()}
-  def get(client, url) do
+  def get(http_client, url) do
     headers = [{"Content-Type", "application/json"}]
     request = Http.Request.new(url: url, headers: headers)
 
-    {:ok, httpoison_response} = client.httpoison.get(request.url, request.headers)
+    {:ok, httpoison_response} = http_client.httpoison.get(request.url, request.headers)
 
     :ok = OutputTracking.emit([:http_client, :requests], request)
 

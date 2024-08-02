@@ -12,7 +12,11 @@ defmodule MyUmbrellaTest do
       london = CoordinatesControl.example(:london)
       current_date_time = CurrentDateTimeControl.Utc.example(:london)
 
-      weather_result = MyUmbrella.create_null() |> MyUmbrella.for_today(london, current_date_time)
+      weather_result =
+        MyUmbrella.NullResponses.new()
+        |> MyUmbrella.NullResponses.with_preciptation()
+        |> MyUmbrella.create_null()
+        |> MyUmbrella.for_today(london, current_date_time)
 
       expected_weather =
         current_date_time
@@ -28,7 +32,10 @@ defmodule MyUmbrellaTest do
       current_date_time = CurrentDateTimeControl.Utc.example(:orlando)
 
       weather_result =
-        MyUmbrella.create_null() |> MyUmbrella.for_today(orlando, current_date_time)
+        MyUmbrella.NullResponses.new()
+        |> MyUmbrella.NullResponses.no_preciptation()
+        |> MyUmbrella.create_null()
+        |> MyUmbrella.for_today(orlando, current_date_time)
 
       assert {:ok, :no_precipitation} == weather_result
     end

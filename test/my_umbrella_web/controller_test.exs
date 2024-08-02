@@ -11,7 +11,8 @@ defmodule MyUmbrellaWeb.ControllerTest do
       london = CoordinatesControl.example(:london)
       current_date_time_utc = CurrentDateTimeControl.Utc.example(:london)
 
-      determine_if_umbrella_need(conn, london, current_date_time_utc)
+      my_umbrella = MyUmbrella.create_null()
+      determine_if_umbrella_need(conn, my_umbrella, london, current_date_time_utc)
 
       assert {200, _headers, body} = Plug.Test.sent_resp(conn)
       assert body =~ "Yes"
@@ -23,16 +24,19 @@ defmodule MyUmbrellaWeb.ControllerTest do
       orlando = CoordinatesControl.example(:orlando)
       current_date_time_utc = CurrentDateTimeControl.Utc.example(:orlando)
 
-      determine_if_umbrella_need(conn, orlando, current_date_time_utc)
+      my_umbrella =
+        MyUmbrella.NullResponses.new()
+        |> MyUmbrella.NullResponses.no_preciptation()
+        |> MyUmbrella.create_null()
+
+      determine_if_umbrella_need(conn, my_umbrella, orlando, current_date_time_utc)
 
       assert {200, _headers, body} = Plug.Test.sent_resp(conn)
       assert body =~ "No"
     end
   end
 
-  defp determine_if_umbrella_need(conn, coordinates, date_time) do
-    my_umbrella = MyUmbrella.create_null()
-
+  defp determine_if_umbrella_need(conn, my_umbrella, coordinates, date_time) do
     conn
     |> Plug.Conn.assign(:current_date_time_utc, date_time)
     |> Plug.Conn.assign(:my_umbrella, my_umbrella)

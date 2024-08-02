@@ -8,11 +8,11 @@ defmodule MyUmbrella.Infrastructure.Http.Response do
 
   @type t() :: %Response{
           status_code: integer(),
-          body: String.t(),
+          body: map(),
           headers: list()
         }
 
-  @enforce_keys [:status_code, :body, :headers]
+  @enforce_keys [:status_code, :body]
   defstruct [:status_code, body: "", headers: []]
 
   @spec new(Enumerable.t()) :: t()

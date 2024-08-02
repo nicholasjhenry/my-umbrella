@@ -8,7 +8,10 @@ defmodule MyUmbrella do
   alias MyUmbrella.Precipitation
   alias MyUmbrella.WeatherReport
 
+  alias MyUmbrella.Infrastructure.Http
   alias MyUmbrella.Infrastructure.WeatherApi
+
+  alias MyUmbrella.Controls.Infrastructure.WeatherApi, as: WeatherApiControls
 
   @type t() :: %MyUmbrella{
           weather_api_client: WeatherApi.Client.t()
@@ -25,6 +28,10 @@ defmodule MyUmbrella do
     %MyUmbrella{weather_api_client: WeatherApi.Client.create_null()}
   end
 
+  def create_null(responses) do
+    %MyUmbrella{weather_api_client: WeatherApi.Client.create_null(responses.weather_api)}
+  end
+
   @spec for_today(t(), Coordinates.t()) :: {:ok, Precipitation.t()} | {:error, term}
   @spec for_today(t(), Coordinates.t(), DateTime.t()) :: {:ok, Precipitation.t()} | {:error, term}
   def for_today(my_umbrella, coordinates, current_date_time_utc \\ DateTime.utc_now()) do
@@ -39,6 +46,30 @@ defmodule MyUmbrella do
         Precipitation.determine_most_intense_precipitation_condition(weather_report_for_today)
 
       {:ok, maybe_precipitation}
+    end
+  end
+
+  defmodule NullResponses do
+    @moduledoc false
+
+    defstruct [:weather_api]
+
+    def new do
+      %__MODULE__{}
+    end
+
+    def with_preciptation(responses) do
+      body = WeatherApiControls.Response.Success.example(:london)
+      response = Http.Response.new(status_code: 200, body: body)
+
+      %{responses | weather_api: response}
+    end
+
+    def no_preciptation(responses) do
+      body = WeatherApiControls.Response.Success.example(:orlando)
+      response = Http.Response.new(status_code: 200, body: body)
+
+      %{responses | weather_api: response}
     end
   end
 end
