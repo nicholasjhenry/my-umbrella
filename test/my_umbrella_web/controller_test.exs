@@ -14,7 +14,7 @@ defmodule MyUmbrellaWeb.ControllerTest do
 
       my_umbrella =
         MyUmbrella.create_null(%{
-          weather_api: WeatherApiControls.Response.Success.example(:london)
+          weather_api_client: WeatherApiControls.Response.Success.example(:london)
         })
 
       determine_if_umbrella_need(conn, my_umbrella, london, current_date_time_utc)
@@ -31,7 +31,7 @@ defmodule MyUmbrellaWeb.ControllerTest do
 
       my_umbrella =
         MyUmbrella.create_null(%{
-          weather_api: WeatherApiControls.Response.Success.example(:orlando)
+          weather_api_client: WeatherApiControls.Response.Success.example(:orlando)
         })
 
       determine_if_umbrella_need(conn, my_umbrella, orlando, current_date_time_utc)

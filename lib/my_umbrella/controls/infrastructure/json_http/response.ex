@@ -3,7 +3,7 @@ defmodule MyUmbrella.Controls.Infrastructure.JsonHttp.Response do
 
   alias MyUmbrella.Infrastructure.JsonHttp.Response
 
-  @spec example() :: JsonResponse.t()
+  @spec example() :: Response.t()
   def example do
     Response.new(
       status_code: 200,

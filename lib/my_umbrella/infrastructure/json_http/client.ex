@@ -37,7 +37,7 @@ defmodule MyUmbrella.Infrastructure.JsonHttp.Client do
   alias Nullables.OutputTracking
 
   @type t() :: %JsonHttp.Client{
-          httpoison: HTTPoison | Http.Client.StubbedHTTPoison
+          httpoison: HTTPoison | JsonHttp.Client.StubbedHTTPoison
         }
 
   @enforce_keys [:httpoison]
@@ -96,7 +96,7 @@ defmodule MyUmbrella.Infrastructure.JsonHttp.Client do
     %JsonHttp.Client{httpoison: StubbedHTTPoison}
   end
 
-  @spec get(t(), String.t()) :: {:ok, Http.Response.t()}
+  @spec get(t(), String.t()) :: {:ok, JsonHttp.Response.t()}
   def get(http_client, url) do
     request = JsonHttp.Request.new(url: url)
 

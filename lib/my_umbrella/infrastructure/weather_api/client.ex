@@ -12,7 +12,8 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.Client do
   alias MyUmbrella.Controls.Infrastructure.WeatherApi, as: WeatherApiControls
 
   @type t() :: %WeatherApi.Client{
-          http_client: JsonHttp.Client.t()
+          http_client: JsonHttp.Client.t(),
+          app_id: String.t()
         }
 
   defstruct [:http_client, :app_id]
@@ -63,13 +64,13 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.Client do
   end
 
   @spec create_null() :: t()
-  @spec create_null(Http.Response.t()) :: t()
   def create_null do
     responses = %{http_client: WeatherApiControls.Response.Success.example(:london)}
 
     create_null(responses)
   end
 
+  @spec create_null(%{http_client: WeatherApi.Response.t()}) :: t()
   def create_null(responses) do
     http_client_responses = [{@default_url <> @request_path, responses.http_client}]
 

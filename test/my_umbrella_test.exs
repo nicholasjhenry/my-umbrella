@@ -15,7 +15,7 @@ defmodule MyUmbrellaTest do
       current_date_time = CurrentDateTimeControl.Utc.example(:london)
 
       responses = %{
-        weather_api: WeatherApiControls.Response.Success.example(:london)
+        weather_api_client: WeatherApiControls.Response.Success.example(:london)
       }
 
       weather_result =
@@ -37,7 +37,7 @@ defmodule MyUmbrellaTest do
       current_date_time = CurrentDateTimeControl.Utc.example(:orlando)
 
       responses = %{
-        weather_api: WeatherApiControls.Response.Success.example(:orlando)
+        weather_api_client: WeatherApiControls.Response.Success.example(:orlando)
       }
 
       weather_result =

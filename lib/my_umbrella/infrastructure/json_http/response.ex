@@ -6,9 +6,10 @@ defmodule MyUmbrella.Infrastructure.JsonHttp.Response do
 
   alias __MODULE__, as: JsonResponse
 
-  @type t() :: %JsonResponse{
+  @type t() :: t(map())
+  @type t(body) :: %JsonResponse{
           status_code: integer(),
-          body: map(),
+          body: body,
           headers: list()
         }
 

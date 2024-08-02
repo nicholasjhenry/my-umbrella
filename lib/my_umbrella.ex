@@ -15,23 +15,21 @@ defmodule MyUmbrella do
         }
   defstruct [:weather_api_client]
 
-  @type responses :: %{
-          weather_api: WeatherApi.Response.t()
-        }
-
   @spec create() :: t()
   def create do
     %MyUmbrella{weather_api_client: WeatherApi.Client.create()}
   end
 
   @spec create_null() :: t()
-  @spec create_null(responses()) :: t()
   def create_null do
     %MyUmbrella{weather_api_client: WeatherApi.Client.create_null()}
   end
 
+  @spec create_null(%{weather_api_client: WeatherApi.Response.t()}) :: t()
   def create_null(responses) do
-    null_weather_client = WeatherApi.Client.create_null(%{http_client: responses.weather_api})
+    null_weather_client =
+      WeatherApi.Client.create_null(%{http_client: responses.weather_api_client})
+
     %MyUmbrella{weather_api_client: null_weather_client}
   end
 

@@ -2,12 +2,15 @@ defmodule MyUmbrella.Controls.Infrastructure.WeatherApi.Response do
   @moduledoc false
 
   alias MyUmbrella.Infrastructure.JsonHttp
-  alias MyUmbrella.Controls.Infrastructure.WeatherApi
+  alias MyUmbrella.Infrastructure.WeatherApi
+
+  alias MyUmbrella.Controls.Infrastructure.WeatherApi, as: WeatherApiControls
 
   defmodule Success do
-    @spec example(:london | :orlando) :: JsonResponse.t()
+    @moduledoc false
+    @spec example(:london | :orlando) :: WeatherApi.Response.t()
     def example(location) do
-      body = WeatherApi.ResponseBody.Success.example(location)
+      body = WeatherApiControls.ResponseBody.Success.example(location)
 
       JsonHttp.Response.new(
         status_code: 200,
@@ -19,7 +22,7 @@ defmodule MyUmbrella.Controls.Infrastructure.WeatherApi.Response do
   defmodule Error do
     @moduledoc false
 
-    @spec example() :: Response.t()
+    @spec example() :: WeatherApi.Response.t()
     def example do
       body = %{
         "cod" => 401,
