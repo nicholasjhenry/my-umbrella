@@ -3,6 +3,7 @@ defmodule MyUmbrellaWeb.ControllerTest do
 
   alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControl
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
+  alias MyUmbrella.Controls.Infrastructure.WeatherApi, as: WeatherApiControls
 
   alias MyUmbrellaWeb.Controller
 
@@ -11,7 +12,11 @@ defmodule MyUmbrellaWeb.ControllerTest do
       london = CoordinatesControl.example(:london)
       current_date_time_utc = CurrentDateTimeControl.Utc.example(:london)
 
-      my_umbrella = MyUmbrella.create_null()
+      my_umbrella =
+        MyUmbrella.create_null(%{
+          weather_api: WeatherApiControls.Response.Success.example(:london)
+        })
+
       determine_if_umbrella_need(conn, my_umbrella, london, current_date_time_utc)
 
       assert {200, _headers, body} = Plug.Test.sent_resp(conn)
@@ -25,9 +30,9 @@ defmodule MyUmbrellaWeb.ControllerTest do
       current_date_time_utc = CurrentDateTimeControl.Utc.example(:orlando)
 
       my_umbrella =
-        MyUmbrella.NullResponses.new()
-        |> MyUmbrella.NullResponses.no_preciptation()
-        |> MyUmbrella.create_null()
+        MyUmbrella.create_null(%{
+          weather_api: WeatherApiControls.Response.Success.example(:orlando)
+        })
 
       determine_if_umbrella_need(conn, my_umbrella, orlando, current_date_time_utc)
 
