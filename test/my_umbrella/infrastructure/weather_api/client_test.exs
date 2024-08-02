@@ -38,9 +38,7 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.ClientTest do
 
     test "handles a response with an error status code" do
       london = CoordinatesControl.example(:london)
-
-      body = WeatherApiControls.ResponseBody.Success.example(:london)
-      response = JsonHttp.Response.new(status_code: 401, body: body)
+      response = WeatherApiControls.Response.Error.example()
 
       result =
         response

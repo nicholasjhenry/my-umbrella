@@ -65,8 +65,7 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.Client do
   @spec create_null() :: t()
   @spec create_null(Http.Response.t()) :: t()
   def create_null do
-    body = WeatherApiControls.ResponseBody.Success.example(:london)
-    response = JsonHttp.Response.new(status_code: 200, body: body)
+    response = WeatherApiControls.Response.Success.example(:london)
 
     create_null(response)
   end
