@@ -65,18 +65,16 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.Client do
   @spec create_null() :: t()
   @spec create_null(Http.Response.t()) :: t()
   def create_null do
-    response = WeatherApiControls.Response.Success.example(:london)
+    responses = %{http_client: WeatherApiControls.Response.Success.example(:london)}
 
-    create_null(response)
+    create_null(responses)
   end
 
-  def create_null(response) do
-    responses = [
-      {@default_url <> @request_path, response}
-    ]
+  def create_null(responses) do
+    http_client_responses = [{@default_url <> @request_path, responses.http_client}]
 
     %WeatherApi.Client{
-      http_client: JsonHttp.Client.create_null(responses),
+      http_client: JsonHttp.Client.create_null(http_client_responses),
       app_id: get_app_id()
     }
   end

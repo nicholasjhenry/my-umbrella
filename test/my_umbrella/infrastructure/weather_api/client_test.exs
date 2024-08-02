@@ -1,7 +1,6 @@
 defmodule MyUmbrella.Infrastructure.WeatherApi.ClientTest do
   use MyUmbrella.TestCase, async: true
 
-  alias MyUmbrella.Infrastructure.JsonHttp
   alias MyUmbrella.Infrastructure.WeatherApi
 
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
@@ -13,13 +12,14 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.ClientTest do
     test "handles a response with a success status code", %{test: test} do
       london = CoordinatesControl.example(:london)
 
-      body = WeatherApiControls.ResponseBody.Success.example(:london)
-      response = JsonHttp.Response.new(status_code: 200, body: body)
-
       ref = OutputTracking.track_output(test, [:http_client, :requests])
 
+      responses = %{
+        http_client: WeatherApiControls.Response.Success.example(:london)
+      }
+
       result =
-        response
+        responses
         |> WeatherApi.Client.create_null()
         |> WeatherApi.Client.get_forecast(london, :today)
 
@@ -38,10 +38,13 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.ClientTest do
 
     test "handles a response with an error status code" do
       london = CoordinatesControl.example(:london)
-      response = WeatherApiControls.Response.Error.example()
+
+      responses = %{
+        http_client: WeatherApiControls.Response.Error.example()
+      }
 
       result =
-        response
+        responses
         |> WeatherApi.Client.create_null()
         |> WeatherApi.Client.get_forecast(london, :today)
 

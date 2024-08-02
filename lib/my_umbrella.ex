@@ -31,7 +31,8 @@ defmodule MyUmbrella do
   end
 
   def create_null(responses) do
-    %MyUmbrella{weather_api_client: WeatherApi.Client.create_null(responses.weather_api)}
+    null_weather_client = WeatherApi.Client.create_null(%{http_client: responses.weather_api})
+    %MyUmbrella{weather_api_client: null_weather_client}
   end
 
   @spec for_today(t(), Coordinates.t()) :: {:ok, Precipitation.t()} | {:error, term}
