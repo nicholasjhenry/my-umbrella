@@ -1,6 +1,6 @@
-defmodule MyUmbrella.Infrastructure.WeatherApi.Response do
+defmodule MyUmbrella.Infrastructure.WeatherApi.ResponseBody do
   @moduledoc """
-  The type representing a response from the weather api.
+  The type representing a response body from the weather api.
   """
 
   @type t :: map()

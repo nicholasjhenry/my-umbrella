@@ -37,7 +37,7 @@ defmodule MyUmbrella do
   def for_today(my_umbrella, coordinates, current_date_time_utc \\ DateTime.utc_now()) do
     with {:ok, response} <-
            WeatherApi.Client.get_forecast(my_umbrella.weather_api_client, coordinates, :today),
-         {:ok, weather_report} <- WeatherApi.Response.to_weather_report(response),
+         {:ok, weather_report} <- WeatherApi.ResponseBody.to_weather_report(response),
          current_date_time_in_time_zone =
            DateTime.shift_zone!(current_date_time_utc, weather_report.time_zone),
          weather_report_for_today <-
@@ -59,14 +59,14 @@ defmodule MyUmbrella do
     end
 
     def with_preciptation(responses) do
-      body = WeatherApiControls.Response.Success.example(:london)
+      body = WeatherApiControls.ResponseBody.Success.example(:london)
       response = JsonHttp.Response.new(status_code: 200, body: body)
 
       %{responses | weather_api: response}
     end
 
     def no_preciptation(responses) do
-      body = WeatherApiControls.Response.Success.example(:orlando)
+      body = WeatherApiControls.ResponseBody.Success.example(:orlando)
       response = JsonHttp.Response.new(status_code: 200, body: body)
 
       %{responses | weather_api: response}

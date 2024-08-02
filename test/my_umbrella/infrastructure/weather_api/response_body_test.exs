@@ -1,9 +1,9 @@
-defmodule MyUmbrella.Infrastucture.WeatherApi.ResponseTest do
+defmodule MyUmbrella.Infrastucture.WeatherApi.ResponseBodyTest do
   use MyUmbrella.TestCase, async: true
 
   alias MyUmbrella.Weather
 
-  alias MyUmbrella.Infrastructure.WeatherApi.Response
+  alias MyUmbrella.Infrastructure.WeatherApi.ResponseBody
 
   alias MyUmbrella.Controls.Calendar.CurrentDateTime, as: CurrentDateTimeControls
   alias MyUmbrella.Controls.Coordinates, as: CoordinatesControl
@@ -12,10 +12,12 @@ defmodule MyUmbrella.Infrastucture.WeatherApi.ResponseTest do
   describe "converting a response" do
     test "given an API response; returns a weather report for current and forecasted conditions",
          %{control_path: control_path} do
-      control_pathname = Path.join([control_path, "weather_api/response/success_london.json"])
-      response = control_pathname |> File.read!() |> :json.decode()
+      control_pathname =
+        Path.join([control_path, "weather_api/response_body/success_london.json"])
 
-      result = Response.to_weather_report(response)
+      response_body = control_pathname |> File.read!() |> :json.decode()
+
+      result = ResponseBody.to_weather_report(response_body)
 
       assert {:ok, weather_report} = result
 
