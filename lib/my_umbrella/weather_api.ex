@@ -6,11 +6,14 @@ defmodule MyUmbrella.WeatherApi do
   - Weather Conditions: https://openweathermap.org/weather-conditions
   """
 
+  @behaviour MyUmbrella.WeatherApi.Behaviour
+
   @weather_api_module Application.compile_env(
                         :my_umbrella,
                         :weather_api_module,
                         MyUmbrella.WeatherApi.Http
                       )
+  @impl true
   def get_forecast(coordinates, duration, url \\ nil),
     do: @weather_api_module.get_forecast(coordinates, duration, url)
 end
