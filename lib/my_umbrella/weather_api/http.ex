@@ -8,27 +8,28 @@ defmodule MyUmbrella.WeatherApi.Http do
   @default_url URI.parse("https://api.openweathermap.org")
 
   @impl true
-  def get_forecast(coordinates, :today, url) do
-    url = url || @default_url
-    encoded_app_id = get_app_id() |> URI.encode()
+  def get_forecast(coordinates, :today, base_url) do
+    url = build_url(coordinates, base_url)
 
-    request =
-      url
-      |> URI.append_path(@request_path)
-      |> URI.append_query(@exclude_query)
-      |> URI.append_query("appid=#{encoded_app_id}")
-      |> append_coorindates_query(coordinates)
-      |> URI.to_string()
-
-    case HTTPoison.get(request) do
+    case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200} = response} ->
         {:ok, Jason.decode!(response.body)}
 
       {:ok, %HTTPoison.Response{status_code: status_code}} ->
         {:error, {:status, status_code}}
-
-        # NOTE: How to test the return type `{:error, HTTPoison.Error.t()}`
     end
+  end
+
+  defp build_url(coordinates, base_url) do
+    base_url = base_url || @default_url
+    encoded_app_id = get_app_id() |> URI.encode()
+
+    base_url
+    |> URI.append_path(@request_path)
+    |> URI.append_query(@exclude_query)
+    |> URI.append_query("appid=#{encoded_app_id}")
+    |> append_coorindates_query(coordinates)
+    |> URI.to_string()
   end
 
   defp append_coorindates_query(uri, {lat, lon}) do
