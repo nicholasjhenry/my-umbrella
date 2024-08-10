@@ -36,16 +36,12 @@ defmodule MyUmbrella.Infrastructure.JsonHttp.ClientTest do
   end
 
   describe "nullability" do
-    test "default response", %{test: test} do
+    test "default response" do
       http_client = JsonHttp.Client.create_null()
-      ref = OutputTracking.track_output(test, [:http_client, :requests])
 
       result = JsonHttp.Client.get(http_client, "http://NOT_CONNECTED/get")
 
       expected_response = JsonHttpControls.Response.NotImplemented.example()
-
-      assert_received {[:http_client, :requests], ^ref,
-                       %JsonHttp.Request{url: "http://NOT_CONNECTED/get"}}
 
       assert {:ok, actual_response} = result
       assert actual_response.status_code == expected_response.status_code
@@ -68,6 +64,16 @@ defmodule MyUmbrella.Infrastructure.JsonHttp.ClientTest do
       assert actual_response.status_code == 200
       assert {"Content-Type", "application/json; charset=utf-8"} in actual_response.headers
       assert %{"hello" => "world"} == actual_response.body
+    end
+
+    test "output tracking", %{test: test} do
+      http_client = JsonHttp.Client.create_null()
+      ref = OutputTracking.track_output(test, [:http_client, :requests])
+
+      _result = JsonHttp.Client.get(http_client, "http://NOT_CONNECTED/get")
+
+      assert_received {[:http_client, :requests], ^ref,
+                       %JsonHttp.Request{url: "http://NOT_CONNECTED/get"}}
     end
   end
 end
