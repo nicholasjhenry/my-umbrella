@@ -102,7 +102,7 @@ defmodule MyUmbrella.Infrastructure.JsonHttp.Client do
 
     {:ok, httpoison_response} = http_client.httpoison.get(request.url, request.headers)
 
-    :ok = OutputTracking.emit([:http_client, :requests], request)
+    :ok = OutputTracking.emit([:http_client, :requested], request)
 
     response =
       JsonHttp.Response.new(

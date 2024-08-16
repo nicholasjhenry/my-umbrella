@@ -68,11 +68,11 @@ defmodule MyUmbrella.Infrastructure.JsonHttp.ClientTest do
 
     test "output tracking", %{test: test} do
       http_client = JsonHttp.Client.create_null()
-      ref = OutputTracking.track_output(test, [:http_client, :requests])
+      ref = OutputTracking.track_output(test, [:http_client, :requested])
 
       _result = JsonHttp.Client.get(http_client, "http://NOT_CONNECTED/get")
 
-      assert_received {[:http_client, :requests], ^ref,
+      assert_received {[:http_client, :requested], ^ref,
                        %JsonHttp.Request{url: "http://NOT_CONNECTED/get"}}
     end
   end

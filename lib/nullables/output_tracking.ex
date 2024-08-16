@@ -14,12 +14,9 @@ defmodule Nullables.OutputTracking do
   @spec track_output(:telemetry.handler_id(), :telemetry.event_name()) :: reference()
   def track_output(handler_id, event_name) do
     ref = make_ref()
+    config = %{caller_pid: self(), ref: ref}
 
-    :ok =
-      :telemetry.attach(handler_id, event_name, &__MODULE__.handle_event/4, %{
-        caller_pid: self(),
-        ref: ref
-      })
+    :ok = :telemetry.attach(handler_id, event_name, &__MODULE__.handle_event/4, config)
 
     ref
   end

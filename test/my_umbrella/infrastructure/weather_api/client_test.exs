@@ -12,7 +12,7 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.ClientTest do
     test "handles a response with a success status code", %{test: test} do
       london = CoordinatesControl.example(:london)
 
-      ref = OutputTracking.track_output(test, [:http_client, :requests])
+      ref = OutputTracking.track_output(test, [:http_client, :requested])
 
       responses = %{
         http_client: WeatherApiControls.Response.Success.example(:london)
@@ -26,7 +26,7 @@ defmodule MyUmbrella.Infrastructure.WeatherApi.ClientTest do
       assert {:ok, response} = result
       assert %{"current" => _current, "hourly" => _hourly} = response
 
-      assert_received {[:http_client, :requests], ^ref, actual_request}
+      assert_received {[:http_client, :requested], ^ref, actual_request}
       assert url = URI.parse(actual_request.url)
       query_params = Plug.Conn.Query.decode(url.query)
 
